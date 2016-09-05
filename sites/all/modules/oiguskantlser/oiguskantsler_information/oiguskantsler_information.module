@@ -1,0 +1,24 @@
+<?php
+
+function oiguskantsler_information_permission(){
+	return array(
+		'Edit oiguskantsler information'=>array(
+			'title'	=> t('Edit oiguskantsler information')
+			),
+		);
+}
+
+function oiguskantsler_information_menu(){
+
+	//settings page
+	$items['admin/oiguskantsler_information'] = array(
+		'title' => 'Õiguskantsler information',
+		'description' => 'Õiguskantsler information',
+	    'page callback' => 'oiguskantsler_information_settings',
+	    'access arguments' => array('Edit oiguskantsler information'),
+	    'file' => 'oiguskantsler_information.admin.inc',
+	    
+	);
+
+	return $items;
+}

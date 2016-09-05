@@ -1,0 +1,4 @@
+name = Õiguskantsler otsing module
+description = Õigukantsleri otsingutulemuste custom search block
+core = 7.x
+

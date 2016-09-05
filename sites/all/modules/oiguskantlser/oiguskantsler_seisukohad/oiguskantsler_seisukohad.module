@@ -1,0 +1,68 @@
+<?php
+
+ 
+function oiguskantsler_seisukohad_block_info() {
+    
+    $blocks['oiguskantsler_lingid'] = array(
+    'info' => t('Õiguskantsler Seisukohtades olevad lingid block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['oiguskantsler_otsing'] = array(
+    'info' => t('Õiguskantsler Otsing  block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_seisukohad_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_lingid':
+            $block['subject'] = t('Jalus ');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Footer'),
+                '#markup' => oiguskantsler_lingid(),
+            );
+            
+            
+            
+            break;
+            case 'oiguskantsler_otsing':
+            $block['subject'] = '<none>';
+      $block['content'] = drupal_get_form('oigus_seisukohad_otsing_form');
+            
+            
+            
+            break;
+       
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_lingid(){
+    
+   $menu_item=menu_load_links('menu-seisukohtade-men-');
+   $output=' <ul class="sidemenu">
+                        ';
+    foreach ($menu_item as $item) {
+        
+        $output.='<li><a href="'.url($item['link_path']).'">'.$item['link_title'].'</a></li>';
+    }
+                        
+                        
+                        
+                        $output.='
+                    </ul>';
+ return $output;
+}

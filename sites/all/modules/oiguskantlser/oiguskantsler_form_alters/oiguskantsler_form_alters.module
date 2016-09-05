@@ -1,0 +1,25 @@
+<?php
+
+
+function oiguskantsler_form_alter($form,&$form_state,$form_id){
+    
+    $str_to_search='_form_';
+    $pikkus=strlen($str_to_search);
+    $position=(strpos($form_id,$str_to_search));
+    $until_nr=$pikkus+$position;
+    $form_id_pikkus=strlen($form_id);
+    $webform_id=(substr($form_id,$until_nr,$form_id_pikkus));
+    
+    switch ($form_id) {
+        
+        case 'webform_client_form_'.$webform_id:
+            
+            break;
+        
+        default:
+            // code...
+            break;
+    }
+    
+    return $form;
+}

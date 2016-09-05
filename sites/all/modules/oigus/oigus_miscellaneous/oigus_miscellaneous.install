@@ -1,0 +1,10 @@
+<?php
+
+function oigus_miscellaneous_update_7001() {
+  db_update('menu_links')
+    ->fields(array(
+      'has_children' => 0,
+    ))
+    ->condition('link_path', 'bzroslyy/fotoalbom')
+    ->execute();
+}

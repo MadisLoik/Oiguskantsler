@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Sisutüübid feature.
+ */
+
+include_once 'sisut_bid.features.inc';

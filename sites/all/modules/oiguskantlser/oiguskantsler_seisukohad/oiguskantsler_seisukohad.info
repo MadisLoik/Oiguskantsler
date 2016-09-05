@@ -1,0 +1,5 @@
+name = Õiguskantsler seisukohad module
+description = Õiguskantsleri seisukohtade blokid
+
+core = 7.x
+

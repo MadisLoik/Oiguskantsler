@@ -1,0 +1,575 @@
+<?php
+/**
+ * Implement hook_menu().
+ */
+function oigus_detailotsing_menu() {
+  $items = array();
+
+  $items['noor/detailotsing'] = array(
+    'title' => ('Detailotsing'),
+    'page callback' => 'oigus_detailotsing_detailsotsing',
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+
+  $items['taiskasvanu/detailotsing'] = array(
+    'title' => ('Detailotsing'),
+    'page callback' => 'oigus_detailotsing_detailsotsing',
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+
+  return $items;
+}
+
+function oigus_detailotsing_theme() {
+  return array(
+    'oigus_detailotsing_detailsotsing_form' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+function theme_oigus_detailotsing_detailsotsing_form($variables) {
+  $form = $variables['form'];
+
+  $output = '<div class="views-exposed-form">';
+  $output .= '<div class="views-exposed-widgets clearfix slidediv" style="display: block; ">';
+
+  $output .= '<div id="edit-search-api-views-fulltext-wrapper" class="views-exposed-widget views-widget-filter-search_api_views_fulltext">';
+  $output .= '<div class="views-widget">';
+  $output .= '<span class="input-wrap"><span class="input-inner">';
+  $output .= '<div class="search-input-01 form-item form-type-textfield form-item-search-api-views-fulltext">';
+  $output .= drupal_render($form['marksonad']);
+  $output .= '</div>';
+  $output .= '</span></span>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= '<div id="edit-alates-wrapper" class="views-exposed-widget views-widget-filter-created">';
+  $output .= '<label for="alates">' . t('Alates') . '</label>';
+  $output .= '<div class="views-widget">';
+  $output .= '<span class="input-wrap"><span class="input-inner">';
+  $output .= drupal_render($form['alates']);
+  $output .= '</span></span>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= '<div id="edit-kuni-wrapper" class="views-exposed-widget views-widget-filter-created">';
+  $output .= '<label for="kuni">' . t('Kuni') . '</label>';
+  $output .= '<div class="views-widget">';
+  $output .= '<span class="input-wrap"><span class="input-inner">';
+  $output .= drupal_render($form['kuni']);
+  $output .= '</span></span>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= '<div id="edit-type-wrapper" class="views-exposed-widget views-widget-filter-type">';
+  $output .= '<label for="sistuup">' . t('Sissekande tüüp') . '</label>';
+  $output .= '<div class="views-widget">';
+  $output .= '<span class="select-wrap"><span class="select-inner">';
+  $output .= drupal_render($form['sisutuup']);
+  $output .= '</span></span>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= drupal_render_children($form);
+
+  $output .= '</div>';
+  $output .= '</div>';
+
+  return $output;
+}
+
+function oigus_detailotsing_detailsotsing_form() {
+  $form = array();
+
+  $form['marksonad'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Märksõna'),
+    '#default_value' => ($marksonad = oigus_detailotsing_get_parameter_value('marksonad')) ? $marksonad : t('Otsi'),
+    '#title_display' => 'invisible',
+    '#id' => 'edit-search-api-views-fulltext',
+    '#attributes' => array(
+      'class' => array('search-input-01'),
+      'name' => 'marksonad',
+    ),
+  );
+
+  $form['alates'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Alates'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('alates'),
+    '#attributes' => array(
+      'class' => array('date'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['kuni'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Kuni'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('kuni'),
+    '#attributes' => array(
+      'class' => array('date'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['sisutuup'] = array(
+    '#type' => 'select',
+    '#title' => t('Sissekandetüüp'),
+    '#options' => oigus_detailotsing_get_content_types(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('sisutuup'),
+    '#id' => 'sisutuup',
+    '#attributes' => array(
+      'class' => array('input-select-w195'),
+      'name' => 'sisutuup',
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Otsi'),
+  );
+
+  return $form;
+}
+
+function oigus_detailotsing_detailsotsing_form_submit($form, &$form_state) {
+  
+  drupal_goto($_GET['q'], array('query' => oigus_detailotsing_build_query(array_map('trim', $form_state['values']))));
+}
+
+function oigus_detailotsing_get_content_types() {
+  $content_types = array('' => t('Kõik'));
+
+  foreach (db_query('SELECT type, name FROM {node_type} ORDER BY name')->fetchAll() as $content_type) {
+    if (in_array($content_type->type, array('apachesolr_multilingual_textfile', 'media_gallery', 'panel'))) {
+      continue;
+    }
+
+    $content_types[$content_type->type] = check_plain($content_type->name);
+  }
+
+  return $content_types;
+}
+
+function oigus_detailotsing_detailsotsing() {
+  global $_domain;
+
+  $output = '<div id="detailotsing">';
+  $output .= render(drupal_get_form('oigus_detailotsing_detailsotsing_form'));
+
+  $tulemused = oigus_detailotsing_tulemused(oigus_detailotsing_build_query());
+
+  foreach ($tulemused as $aasta => $nodes) {
+    $output .= '<h3>' . $aasta . '</h3><ul class="list02">';
+
+    $i = 1;
+
+    foreach ($nodes as $node) {
+      $output .= '<li><div class="indent clear">' . t('@index.', array('@index' => $i++)) . ' ' . l($node->title, 'node/' . $node->nid) . '</div></li>';
+    }
+
+    $output .= '</ul>';
+  }
+
+  if(count(oigus_detailotsing_build_query())>0 && count($tulemused) == 0){
+    $output .= '<p>'.t('Your search yielded no results').'</p>';
+  }
+
+  $output .= '</div>';
+
+  return $output;
+}
+
+function oigus_detailotsing_tulemused($parameters, $clean = false, $count = false, $authorities = false) {
+  global $language;
+  global $_domain;
+
+  $tulemused = array();
+  
+  $nids = array();
+  if (isset($parameters['marksonad'])) {
+    //variable_set('apachesolr_rows', 10000);
+    
+    $search_results = oigus_detailotsing_search($parameters['marksonad']); //print_r($search_results);
+    //variable_set('apachesolr_rows', 10);
+  
+    //$parameters['alates']=str_replace('-','.',$parameters['alates']);
+    //$parameters['kuni']=str_replace('-','.',$parameters['kuni']);
+        
+    $alates=new DateTime($parameters['alates']);
+    $alates=$alates->format('d.m.Y');
+    $parameters['alates']=$alates;
+    $kuni=new DateTime($parameters['kuni']);
+    $kuni=$kuni->format('d.m.Y');
+    $parameters['kuni']=$kuni;
+    
+    foreach ($search_results as $result) {
+      if ($result->entity_type == 'node') {
+        $nids[$result->entity_id] = $result->entity_id;
+      }
+      else if ($result->entity_type == 'file' && isset($result['file']->is_nid)) {
+        if(isset($parameters['dokumendist'])) $nids[$result['file']->is_nid] = $result['file']->is_nid;
+      }
+    }
+  }
+
+  if(count($parameters) == 0 || (isset($parameters['marksonad']) && count($nids) == 0)){
+    if($count){
+      return 0;
+    }else{
+      return $tulemused;
+    }
+  }
+
+  $query = new EntityFieldQuery;
+
+  $query
+    ->entityCondition('entity_type', 'node')
+    ->propertyCondition('status', 1)
+    ->propertyCondition('language', $language->language);
+  
+  
+  if(isset($parameters['sisutuup'])) $query->entityCondition('bundle', $parameters['sisutuup']);
+
+  if ($parameters['alates']) {
+    $alates=new DateTime($parameters['alates']);
+    $alates=$alates->format('d.m.Y');
+    $parameters['alates']=$alates;
+    $kuni=new DateTime($parameters['kuni']);
+    $kuni=$kuni->format('d.m.Y');
+    $parameters['kuni']=$kuni;
+    list($day, $month, $year) = explode('.', $parameters['alates']);
+
+    $query
+      ->propertyCondition('created', mktime(0, 0, 0, $month, $day, $year), '>=');
+  }
+
+  if ($parameters['kuni']) {
+    $alates=new DateTime($parameters['alates']);
+    $alates=$alates->format('d.m.Y');
+    $parameters['alates']=$alates;
+    $kuni=new DateTime($parameters['kuni']);
+    $kuni=$kuni->format('d.m.Y');
+    $parameters['kuni']=$kuni;
+    list($day, $month, $year) = explode('.', $parameters['kuni']);
+
+    $query
+      ->propertyCondition('created', mktime(0, 0, 0, $month, $day, $year), '<=');
+  }
+
+  if ($parameters['year']) {
+    $query
+      ->propertyCondition('created', mktime(0, 0, 0, 1, 1, $parameters['year']), '>=')
+      ->propertyCondition('created', mktime(0, 0, 0, 12, 31, $parameters['year']), '<=');
+  }
+
+  if(isset($parameters['marksonad'])) {
+    if(count($nids)>0) $query->propertyCondition('nid', $nids);
+  }
+
+  if (isset($parameters['menetluse_liik'])) {
+    $query
+      ->fieldCondition('field_menetluse_liik', 'tid', $parameters['menetluse_liik']);
+  }
+
+  if (isset($parameters['dokumendi_liik'])) {
+    $liigid = explode('-', check_plain($parameters['dokumendi_liik']));
+    $query
+      ->fieldCondition('field_doctype', 'tid', $liigid);
+  }
+  if (isset($parameters['dokumendi_liik2'])) {
+    $liigid = explode('-', check_plain($parameters['dokumendi_liik2']));
+    $query
+      ->fieldCondition('field_doctype2', 'tid', $liigid);
+  }
+  if (isset($parameters['dokumendi_liik3'])) {
+    $liigid = explode('-', check_plain($parameters['dokumendi_liik3']));
+    $query
+      ->fieldCondition('field_doctype3', 'tid', $liigid);
+  }
+
+  if (isset($parameters['valitsemisala'])) {
+    $alad = explode('-', check_plain($parameters['valitsemisala']));
+    $query
+      ->fieldCondition('field_valitsemisala', 'tid', $alad);
+  }
+
+  if (isset($parameters['asutus'])) {
+    $query
+      ->fieldCondition('field_valitsemisala', 'tid', $parameters['asutus']);
+  }
+
+  if($_domain['domain_id'] == 2){
+    $query->fieldCondition('field_child', 'value', 1, '=');
+    // HACK
+    $query->addMetaData('account', user_load(1));
+  }
+
+  $query->propertyOrderBy('created', 'DESC');
+
+  if ($authorities) {
+    $result = $query->execute();
+    $nodes = entity_load('node', @array_keys($result['node']));
+
+    $alad = array();
+    $alad2 = array();
+
+    foreach($nodes as $node) {
+      if (isset($parameters['aasta']) && $parameters['aasta'] != date('Y', $node->created)) {
+        continue;
+      }
+
+      $va = $node->field_valitsemisala['und'];
+
+      foreach($va as $v) {
+        $alad2[$v['tid']] = $v['tid'];
+      }
+    }
+
+    foreach($alad2 as $ala){
+      $term = taxonomy_term_load($ala);
+
+      if(count(taxonomy_get_parents($term->tid))) {
+        $alad[$term->tid] = $term->name;
+      }
+    }
+
+    return $alad;
+  }
+
+  if($count){
+    return $query->count()->execute();
+  }else{
+    if(isset($_GET['all']) && $_GET['all'] == 1){
+
+    }else{
+      if (!isset($parameters['aasta']) && !isset($parameters['all'])) {
+        $query->pager(10);
+      }
+    }
+  }
+
+  $result = $query->execute();
+
+  $nodes = entity_load('node', @array_keys($result['node']));
+
+  $nids = array();
+  $fids = array();
+
+  foreach ($nodes as $node) {
+/*
+    if (isset($parameters['marksonad'])) {
+      $continue = TRUE;
+
+      if (isset($parameters['dokumendist']) && $parameters['dokumendist'] && in_array($node->nid, $fids)) {
+        $continue = FALSE;
+      }
+
+      if ($parameters['sisutuup'] == 'seisukoht') {
+        $sildid = oigus_seisukohad_sildid();
+
+        $tids = array();
+
+        foreach ($node->field_tags['und'] as $item) {
+          $tids[] = $item['tid'];
+        }
+
+        foreach ($sildid as $tid => $name) {
+          if (!in_array($tid, $tids)) {
+            unset($sildid[$tid]);
+          }
+        }
+
+        if (stristr(implode(' ', $sildid), $parameters['marksonad'])) {
+          $continue = FALSE;
+        }
+      }
+
+      if (in_array($node->nid, $nids)) {
+        $continue = FALSE;
+      }
+
+      if ($continue) {
+        continue;
+      }
+    }
+*/
+
+    if (!isset($tulemused[date('Y', $node->created)])) {
+      $tulemused[date('Y', $node->created)] = array();
+    }
+
+    $tulemused[date('Y', $node->created)][] = $node;
+  }
+
+  krsort($tulemused);
+
+  if($clean){
+    $clean = array();
+    foreach($tulemused as $tulemus){
+      $clean = array_merge($clean, $tulemus);
+    }
+    return $clean;
+  }
+
+  if (is_numeric($parameters['aasta'])) {
+    return in_array($parameters['aasta'], array_keys($tulemused)) ? array($parameters['aasta'] => $tulemused[$parameters['aasta']]) : array();
+  }
+
+  return $tulemused;
+}
+
+function oigus_detailotsing_query_parameters() {
+  return array(
+    'marksonad',
+    'alates',
+    'kuni',
+    'menetluse_liik',
+    'dokumendi_liik',
+    'dokumendi_liik2',
+    'dokumendi_liik3',
+    'valitsemisala',
+    'asutus',
+    'dokumendist',
+    'aasta',
+    'sisutuup',
+    'vaade',
+    'page',
+  );
+}
+
+function oigus_detailotsing_get_parameter_value($parameter_name) {
+  
+  return isset($_GET[$parameter_name]) ? check_plain($_GET[$parameter_name]) : NULL;
+}
+
+function oigus_detailotsing_build_query($parameters = array()) {
+  foreach (oigus_detailotsing_query_parameters() as $parameter_name) {
+    if (isset($_GET[$parameter_name]) && !isset($parameters[$parameter_name])) {
+      $parameters[$parameter_name] = $_GET[$parameter_name];
+    }
+  }
+
+  foreach ($parameters as $parameter_name => $parameter_value) {
+    if (!in_array($parameter_name, oigus_detailotsing_query_parameters()) || empty($parameter_value)) {
+      unset($parameters[$parameter_name]);
+    }
+  }
+
+  if(isset($parameters['marksonad']) && $parameters['marksonad'] == t('Otsi')) unset($parameters['marksonad']);
+  
+  return $parameters;
+}
+
+function oigus_detailotsing_search($keys) {
+  $info = FALSE;
+  
+  $active_module_info = search_get_info();
+  
+  //die(print_r($active_module_info));
+
+  if (isset($active_module_info['node'])) {
+    $info = $active_module_info['node'];
+  }
+
+  if (empty($info)) {
+    $info = search_get_default_module_info();
+  }
+  $results = array();
+  $conditions = NULL;
+  
+  if (isset($info['conditions_callback']) && function_exists($info['conditions_callback'])) {
+    $conditions = call_user_func($info['conditions_callback'], $keys);
+    
+    
+  }
+  
+  $solr = apachesolr_get_solr();
+  if(isset($_GET['alates'])):
+  $datetime = new DateTime($_GET['alates']);
+  $datetime=$datetime->format('Y-m-d');
+  $datetime_minutid = new DateTime($_GET['alates']);
+  $datetime_minutid = $datetime_minutid->format('h:m:s');
+  $whole_datetime=$datetime.'T'.$datetime_minutid.'Z';
+  else:
+    
+  $whole_datetime='1970-12-31T23:59:59Z';
+    
+  endif; 
+  if(isset($_GET['kuni'])):
+  $datetime_kuni = new DateTime($_GET['kuni']);
+  $datetime_kuni = $datetime_kuni->format('Y-m-d');
+  $datetime_minutid_kuni = new DateTime($_GET['kuni']);
+  $datetime_minutid_kuni = $datetime_minutid_kuni->format('h:m:s');
+  $whole_datetime_kuni=$datetime_kuni.'T'.$datetime_minutid_kuni.'Z';
+  else:
+  
+  $whole_datetime_kuni='NOW';
+    
+  endif; 
+ 
+  $date= date('c',$_GET['alates']);
+  
+  
+  $query = apachesolr_drupal_query("custom", array('q' => $_GET['marksonad'] ), 'sort_label asc', 'search/path');
+  $query->addParam('q',$_GET['marksonad']);
+  
+  $query->addParam('rows',200);
+  if(isset($whole_datetime)and isset($whole_datetime_kuni)):
+  $query->addParam('fq','ds_created:['.strval($whole_datetime).' TO '.strval($whole_datetime_kuni).']');
+  endif;
+  if(isset($_GET['menetluse_liik'])):
+    
+  $query->addParam('fq','im_field_menetluse_liik:'.$_GET['menetluse_liik']);
+  
+  endif; 
+  
+  if(isset($_GET['sisutuup'])):
+    
+  $query->addParam('fq','bundle:'.$_GET['sisutuup']);
+  
+  endif;  
+  
+  if(isset($_GET['valitsemisala'])):
+    
+  $query->addParam('fq','im_field_valitsemisala:'.$_GET['valitsemisala']);
+  
+  endif;  
+  
+  if(isset($_GET['dokumendi_liik'])):
+    
+  $query->addParam('fq','im_field_doctype2:'.$_GET['dokumendi_liik']);
+  
+  endif; 
+  
+  if(isset($_GET['asutus'])):
+    
+  $query->addParam('fq','im_field_valitsemisala:'.$_GET['asutus']);
+  
+  endif;  
+  
+  
+  
+  //$query->addParam('fq', 'bundle:'.$_GET['sisutuup']);
+  $resp = $query->search();
+  
+  
+  
+  $conditions['xoxo'] = 1;
+  if($resp->response->numFound!=0):
+    
+  $results = $resp->response->docs; 
+  endif;
+  if ($keys || !empty($conditions)) {
+    //$results = search_data($keys, $info['module'], $conditions);
+  }
+  
+  //die(print_r($results));
+
+  return $results;
+}

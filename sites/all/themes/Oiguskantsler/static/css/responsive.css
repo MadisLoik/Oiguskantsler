@@ -1,0 +1,21 @@
+/* Small screens < 768 */
+@media (max-width: 768px) {
+	
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+	
+	body.content header{ height: 35vh; background: url(../images/maja-wide.jpg) no-repeat center top; background-size: 400%; }
+	
+	.logo img{ max-width: 80%; }
+	
+	.col-lg-fifth{ width: 100%; }
+	.col-lg-fifth,
+	.col-lg-fifth a{ color: #FFF; }
+	
+	/* Trail */
+	.trail{ margin-bottom: 15px; margin-left: -15px; margin-top: -15px; }
+
+	
+}

@@ -1,0 +1,5 @@
+name = Seisukohad
+package = Õiguskantsler
+core = 7.x
+
+dependencies[] = oigus_detailotsing

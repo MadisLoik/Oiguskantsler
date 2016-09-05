@@ -1,0 +1,203 @@
+<?php
+/**
+ * Implements hook_field_info().
+ */
+function oigus_asutus_field_info() {
+  return array(
+    'oigus_asutus_asutus' => array(
+      'label' => t('Asutus'),
+      'default_widget' => 'oigus_asutus_asutus',
+      'default_formatter' => 'oigus_asutus_asutus',
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_is_empty().
+ */
+function oigus_asutus_field_is_empty($item, $field) {
+  $temp = array_keys($field['columns']);
+  $key = array_shift($temp);
+
+  return empty($item[$key]);
+}
+
+/**
+ * Implements hook_field_formatter_info().
+ */
+function oigus_asutus_field_formatter_info() {
+  return array(
+    'oigus_asutus_asutus' => array(
+      'label' => t('Asutus'),
+      'field types' => array('oigus_asutus_asutus'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_formatter_view().
+ */
+function oigus_asutus_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+  $element = array();
+
+  switch ($display['type']) {
+    case 'oigus_asutus_asutus':
+      foreach ($items as $delta => $item) {
+        $element[$delta]['#markup'] = '';
+      }
+
+      break;
+  }
+
+  return $element;
+}
+
+/**
+ * Implements hook_field_widget_info().
+ */
+function oigus_asutus_field_widget_info() {
+  return array(
+    'oigus_asutus_asutus' => array(
+      'label' => t('Asutus'),
+      'field types' => array('oigus_asutus_asutus'),
+    ),
+  );
+}
+
+/**
+ * Implements hook_field_widget_form().
+ */
+function oigus_asutus_field_widget_form(&$form, &$form_state, $field, $instance, $langcode, $items, $delta, $element) {
+  $language = $langcode;
+
+  if (isset($form_state['node']->language)) {
+    $language = $form_state['node']->language;
+  }
+
+  if (isset($form_state['input']['language'])) {
+    $language = $form_state['input']['language'];
+  }
+
+  switch ($instance['widget']['type']) {
+    case 'oigus_asutus_asutus':
+      $machine_name = variable_get('oigus_asutus_asutused', NULL);
+      $vocabulary = taxonomy_vocabulary_machine_name_load($machine_name);
+
+      $options = array();
+
+      $options[] = t('- None -');
+
+      foreach (taxonomy_get_tree($vocabulary->vid, 0, NULL, TRUE) as $term) {
+        $options[$term->tid] = check_plain($term->name);
+      }
+
+      $element += array(
+        '#type' => 'fieldset',
+      );
+
+      $element['vid'] = array(
+        '#type' => 'value',
+        '#default_value' => $vocabulary->vid,
+      );
+
+      $element['tid'] = array(
+        '#type' => 'select',
+        '#title' => $vocabulary->name,
+        '#options' => $options,
+        '#default_value' => isset($items[$delta]['tid']) ? $items[$delta]['tid'] : 0,
+        '#prefix' => '<div id="field_institution_wrapper">',
+        '#suffix' => '</div>',
+      );
+
+      $element['new_institution_name'] = array(
+        '#type' => 'textfield',
+        '#title' => t('Uus asutus'),
+        '#default_value' => isset($items[$delta]['new_institution_name']) ? check_plain($items[$delta]['new_institution_name']) : '',
+        '#element_validate' => array('oigus_asutus_new_institution_name_validate'),
+      );
+
+      break;
+  }
+
+  return $element;
+}
+
+function oigus_asutus_new_institution_name_validate($element, &$form_state, $form) {
+  $term_name = trim($form_state['values']['field_institution']['und'][0]['new_institution_name']);
+  $vid = $form_state['values']['field_institution']['und'][0]['vid'];
+
+  if ($term_name) {
+    $term = new stdClass;
+    $term->vid = $vid;
+    $term->name = $term_name;
+
+    $tid = NULL;
+
+    if (taxonomy_term_save($term) == SAVED_NEW) {
+      $tid = $term->tid;
+    }
+    else {
+      $terms = taxonomy_get_term_by_name($term_name);
+
+      if (isset($terms[0]->tid)) {
+        $tid = $terms[0]->tid;
+      }
+    }
+
+    if ($tid) {
+      $form_state['values']['field_institution']['und'][0]['tid'] = $tid;
+    }
+  }
+}
+
+/**
+ * Implements hook_form_alter(().
+ */
+function oigus_asutus_form_alter(&$form, &$form_state, $form_id) {
+  /*if (isset($form['#node_edit_form']) && $form['#node_edit_form'] && isset($form['language']['#default_value'])) {
+    $node_language = isset($form_state['values']['language']) ? $form_state['values']['language'] : $form['language']['#default_value'];
+
+    $form['language']['#default_value'] = $node_language;
+
+    $form['language']['#ajax'] = array(
+      'event' => 'change',
+      'callback' => 'oigus_asutus_field_institution_callback',
+      'wrapper' => 'field_institution_wrapper',
+    );
+
+    $form['field_institution']['und'][0]['tid']['#options'] = oigus_asutus_institutions($node_language);
+  }*/
+}
+
+function oigus_asutus_field_institution_callback($form, $form_state) {
+  return $form['field_institution']['und'][0]['tid'];
+}
+
+function oigus_asutus_institutions($language = 'et') {
+  switch ($language) {
+    case 'en':
+      $machine_name = variable_get('oigus_asutus_eng', NULL);
+
+      break;
+    case 'ru':
+      $machine_name = variable_get('oigus_asutus_rus', NULL);
+
+      break;
+    case 'et':
+    default:
+      $machine_name = variable_get('oigus_asutus_est', NULL);
+
+      break;
+  }
+
+  $vocabulary = taxonomy_vocabulary_machine_name_load($machine_name);
+
+  $options = array();
+  $options[] = t('- None -');
+
+  foreach (taxonomy_get_tree($vocabulary->vid, 0, NULL, TRUE) as $term) {
+    $options[$term->tid] = check_plain($term->name);
+  }
+
+  return $options;
+}

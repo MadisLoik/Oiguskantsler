@@ -1,0 +1,914 @@
+<?php
+
+
+
+/*
+function oigus_seisukohad_form_alter(&$form, &$form_state, $form_id) {
+  $form['#action'] = str_replace('oiguskantsler.kalaruudus.ee', 'localhost', $form['#action']);
+}
+*/
+
+
+
+/**
+ * Implements hook_menu().
+ */
+function oigus_seisukohad_menu() {
+  $items = array();
+
+  $items['seisukohad/arhiiv'] = array(
+    'title' => 'Viimased seisukohad',
+    'page callback' => 'oigus_seisukohad_arhiiv',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  $items['seisukohad/otsing'] = array(
+    'title' => 'Otsingutulemused',
+    'page callback' => 'oigus_seisukohad_otsing',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function oigus_seisukohad_arhiiv($year = false, $month = false) {
+  global $language;
+  $output = '';
+
+  if(!$month && arg(2) == '12-kuud'){
+    $current_year = format_date(time(), 'custom', 'Y');
+    $current_month = format_date(time(), 'custom', 'm');
+
+    $total = 0; $i = 0;
+    while($i < 12){
+      $y = $current_year;
+      $m = $current_month-$i;
+      if($m<=0){
+        $m = $m+12;
+        $y = $y-1;
+      }
+      $output .= oigus_seisukohad_arhiiv($y, $m);
+      $i++;
+    }
+
+    return $output;
+  }
+
+  $year = (int) $year;
+  $month = (int) $month;
+  $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+
+  $query = db_select('node', 'n')
+    ->fields('n', array('nid', 'title', 'created'))
+    ->condition('type', 'seisukoht')
+    ->condition('language', $language->language)
+    ->condition('status', 1)
+    ->where('YEAR(FROM_UNIXTIME(created)) = :y AND MONTH(FROM_UNIXTIME(created)) = :m', array(':y' => $year, ':m' => $month))
+    ->orderBy('created', 'DESC');
+
+  $result = $query->execute();
+
+  $output .= '<h3>'.t($months[$month-1]).' '.$year.'</h3>'.'<ul class="list02">';
+  foreach ($result as $node){
+    $output .= '<li><div class="indent clear"><p class="date">'.format_date($node->created, 'custom', 'd.m.Y').'</p>'.l($node->title, 'node/'.$node->nid).'</div></li>';
+  }
+
+  $output .= '</ul>';
+
+/*
+  '<ul class="list02">
+  	<li>
+  		<div class="indent clear">
+  			<p class="date">30.08.2010</p>
+  			<a href="#">Ajateenijatelt isikuandmete küsimine väeosades on osaliselt õigusvastane</a>
+  		</div>
+  	</li>
+  	<li>
+  		<div class="indent clear">
+  			<p class="date">16.07.2010</p>
+  			<a href="#">Avalikes huvides vajalike tehnovõrkude ja –rajatiste talumistasud ei taga õiglast tasakaalu maaomanike ja üldsuse huvide vahel</a>
+  		</div>
+  	</li>
+  </ul>';
+*/
+
+  return $output;
+}
+
+function theme_oigus_seisukohad_kitsendused_form($variables) {
+  $form = $variables['form'];
+
+  $output = '<div class="filter clear">';
+  $output .= '<h3>' . t('Kitsenda tulemusi') . '</h3>';
+  $output .= '<div class="one-row">';
+
+  $output .= '<div class="p"><label>' . t('Aastad') . ':</label>';
+  $output .= '<span class="select-wrap"><span class="select-inner">';
+  $output .= drupal_render($form['aasta']);
+  $output .= '</span></span></div>';
+
+  $output .= '<label>' . t('Asutused') . ':</label>';
+  $output .= '<span class="select-wrap"><span class="select-inner">';
+
+  $form['asutus']['#attributes']['name'] = 'ausutus';
+
+  $output .= drupal_render($form['asutus']);
+  $output .= '</span></span>';
+
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= drupal_render_children($form);
+
+  return $output;
+}
+
+function oigus_seisukohad_kitsendused_form() {
+  $form = array();
+
+  $form['sisutuup'] = array(
+    '#type' => 'value',
+    '#value' => 'seisukoht',
+  );
+
+  $form['aasta'] = array(
+    '#title' => t('Aastad'),
+    '#type' => 'select',
+    '#options' => array(t('Kõik aastad')) + oigus_seisukohad_aastad(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('aasta'),
+    '#id' => 'aasta',
+    '#attributes' => array(
+      'class' => array('input-select-medium'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['asutused'] = array(
+    '#title' => t('Asutused'),
+    '#type' => 'select',
+    '#options' => array(t('Kõik asutused')) + oigus_seisukohad_asutused(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('asutus'),
+<<<<<<< .mine
+<<<<<<< .mine
+    '#id' => 'asutus2',
+=======
+    '#id' => 'asutused',
+=======
+    '#id' => 'asutus',
+>>>>>>> .r13080
+>>>>>>> .r13079
+    '#attributes' => array(
+      'name' => 'asutus',
+      'class' => array('input-select-medium'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Kitsenda'),
+    '#attributes' => array(
+      'class' => array('element-invisible'),
+    ),
+  );
+
+  return $form;
+}
+
+function oigus_seisukohad_kitsendused_form_submit($form, &$form_state) {
+die(print_r($form_state['values']));
+  //drupal_goto('seisukohad/otsing', array('query' => oigus_detailotsing_build_query(array_map('trim', $form_state['values']))));
+}
+
+function oigus_seisukohad_theme() {
+  return array(
+    'oigus_seisukohad_otsing_form' => array(
+      'render element' => 'form',
+    ),
+    'oigus_seisukohad_kitsendused_form' => array(
+      'render element' => 'form',
+    ),
+    'oigus_seisukohad_uldotsing_form' => array(
+      'render element' => 'form',
+    ),
+  );
+}
+
+function theme_oigus_seisukohad_otsing_form($variables) {
+  $form = $variables['form'];
+
+  $output = '<div class="views-exposed-form">';
+  $output .= '<div id="quick-search">';
+  $output .= '<p id="open-advanced-search" class="more" >';
+  $output .= '<a href="#">' .  t('Detailne otsing') . '</a>';
+  $output .= '</p>';
+  $output .= '</div>';
+  $output .= '<div id="advanced-search-keyword" style="display:none">';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="marksonad">' . t('Märksõna') . ':</label>';
+  $output .= '<span class="input-wrap">';
+  $output .= '<span class="input-inner">';
+  $output .= drupal_render($form['marksonad']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '</div>';
+
+  $output .= '<div id="advanced-search" style="display: none;">';
+
+  $output .= '<div class="form-row clear">';
+  $output .= '<div class="col1">';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="alates">' . t('Alates') . ':</label>';
+  $output .= '<span class="input-wrap">';
+  $output .= '<span class="input-inner">';
+  $output .= drupal_render($form['alates']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '</div>';
+  $output .= '<div class="form-row"></div>';
+  $output .= '<div class="col2">';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="kuni">' . t('Kuni') . ':</label>';
+  $output .= '<span class="input-wrap">';
+  $output .= '<span class="input-inner">';
+  $output .= drupal_render($form['kuni']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="menetluse_liik">' . t('Menetluse liik') . ':</label>';
+  $output .= '<span class="select-wrap">';
+  $output .= '<span class="select-inner">';
+  $output .= drupal_render($form['menetluse_liik']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="dokumendi_liik">' . t('Dokumendi liik') . ':</label>';
+  $output .= '<span class="select-wrap">';
+  $output .= '<span class="select-inner">';
+  $output .= drupal_render($form['dokumendi_liik']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="valitsemisala">' . t('Valitsemisala') . ':</label>';
+  $output .= '<span class="select-wrap">';
+  $output .= '<span class="select-inner">';
+  $output .= drupal_render($form['valitsemisala']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '<div class="form-row">';
+  $output .= '<label for="asutus">' . t('Asutus') . ':</label>';
+  $output .= '<span class="select-wrap">';
+  $output .= '<span class="select-inner">';
+  $output .= drupal_render($form['asutus']);
+  $output .= '</span>';
+  $output .= '</span>';
+  $output .= '</div>';
+
+  $output .= '<div class="form-row check clear">';
+  $output .= '<span class="checkbox" style="background-position: 0 0;"></span>';
+  $output .= drupal_render($form['dokumendist']);
+  $output .= '</div>';
+
+  $output .= '<div class="action clear">';
+  $output .= '<button type="submit"><span><strong>'.t('Otsi').'</strong></span></button>';
+  $output .= '<p class="back"><a id="hide-advanced-search" class="slideup" href="">'.t('Peida detailotsing').'</a></p>';
+  $output .= '</div>';
+
+  $output .= drupal_render_children($form);
+
+  $output .= '</div>';
+  $output .= '</div>';
+
+  return $output;
+}
+
+function oigus_seisukohad_otsing_form() {
+  $form = array();
+
+  $form['sisutuup'] = array(
+    '#type' => 'value',
+    '#value' => 'seisukoht',
+  );
+
+  $form['vaade'] = array(
+    '#type' => 'value',
+    '#value' => 'otsing',
+  );
+
+  $form['marksonad'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Märksõna'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('marksonad'),
+    '#id' => 'marksonad',
+    '#attributes' => array(
+      'class' => array('text'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['alates'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Alates'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('alates'),
+    '#id' => 'alates',
+    '#attributes' => array(
+      'class' => array('date'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['kuni'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Kuni'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('kuni'),
+    '#id' => 'kuni',
+    '#attributes' => array(
+      'class' => array('date'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['menetluse_liik'] = array(
+    '#type' => 'select',
+    '#title' => t('Menetluse liik'),
+    '#options' => array(t('Kõik menetluse liigid')) + oigus_seisukohad_menetluse_liigid(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('menetluse_liik'),
+    '#id' => 'menetluse_liik',
+    '#attributes' => array(
+      'class' => array('input-select-medium'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['dokumendi_liik'] = array(
+    '#type' => 'select',
+    '#title' => t('Dokumendi liik'),
+    '#options' => array(t('Kõik dokumendi liigid')) + oigus_seisukohad_dokumendi_liigid(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('dokumendi_liik'),
+    '#id' => 'dokumendi_liik',
+    '#attributes' => array(
+      'class' => array('input-select-medium'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['valitsemisala'] = array(
+    '#type' => 'select',
+    '#title' => t('Valitsemisalad'),
+    '#options' => array(t('Kõik valitsemisalad')) + oigus_seisukohad_valitsemisalad(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('valitsemisala'),
+    '#id' => 'valitsemisala',
+    '#attributes' => array(
+      'class' => array('input-select-medium'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['asutus'] = array(
+    '#type' => 'select',
+    '#title' => t('Asutused'),
+    '#options' => array(t('Kõik asutused')) + oigus_seisukohad_asutused(),
+    '#default_value' => oigus_detailotsing_get_parameter_value('asutus'),
+    '#id' => 'asutus',
+    '#attributes' => array(
+      'class' => array('input-select-medium'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['dokumendist'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Otsi märksõna ka dokumentide tekstist'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('dokumendist'),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Otsi'),
+    '#attributes' => array(
+      'class' => array('element-invisible'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  return $form;
+}
+
+function oigus_seisukohad_otsing_form_submit($form, &$form_state) {
+  drupal_goto('seisukohad/otsing', array('query' => oigus_detailotsing_build_query(array_map('trim', $form_state['values']))));
+}
+
+function theme_oigus_seisukohad_uldotsing_form($variables) {
+  $form = $variables['form'];
+
+  $output = '';
+
+  $output .= '<div class="views-exposed-form">';
+  $output .= '<div class="views-exposed-widgets clearfix">';
+  $output .= '<div id="edit-otsisna-wrapper" class="views-exposed-widget views-widget-filter-search_api_views_fulltext">';
+  $output .= '<div class="views-widget">';
+  $output .= '<div class="form-item form-type-textfield form-item-otsisõna">';
+  $output .= drupal_render($form['marksonad']);
+  $output .= '</div>';
+  $output .= '</div>';
+  $output .= '</div>';
+  $output .= '<div class="views-exposed-widget views-submit-button">';
+  $output .= drupal_render($form['submit']);
+  $output .= '</div>';
+  $output .= '</div>';
+  $output .= '</div>';
+
+  $output .= drupal_render_children($form);
+
+  return $output;
+}
+
+function oigus_seisukohad_uldotsing_form() {
+  $form = array();
+
+  $form['#id'] = 'views-exposed-form-seisukohtade-otsing-page';
+
+  $form['sisutuup'] = array(
+    '#type' => 'value',
+    '#value' => 'seisukoht',
+  );
+
+  $form['dokumendist'] = array(
+    '#type' => 'value',
+    '#value' => 1,
+  );
+
+  $form['marksonad'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Märksõna'),
+    '#default_value' => oigus_detailotsing_get_parameter_value('marksonad'),
+    '#default_value' => t('Otsi'),
+    '#id' => 'edit-otsisna',
+    '#attributes' => array(
+      'class' => array('text'),
+    ),
+    '#title_display' => 'invisible',
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Otsi'),
+    '#id' => 'edit-submit-seisukohtade-otsing',
+  );
+
+  return $form;
+}
+
+function oigus_seisukohad_uldotsing_form_submit($form, &$form_state) {
+  drupal_goto('seisukohad/otsing', array('query' => oigus_detailotsing_build_query(array_map('trim', $form_state['values']))));
+}
+
+function oigus_seisukohad_otsing() {  
+  $output = '';
+  
+  if(isset($_GET['vaade'])){
+    $seisukohad = oigus_detailotsing_tulemused(oigus_detailotsing_build_query(), 1);
+    $count = count($seisukohad);
+    drupal_set_title(t('Otsingutulemused').' ('.$count.')');    
+    //$seisukohad = oigus_detailotsing_tulemused(oigus_detailotsing_build_query(), 0);
+    
+    $all = (int) $_GET['all'];
+    
+    $limit = 10;
+    $pages = ceil($count/$limit);
+    $page = (int) $_GET['pager'];
+    if(!$page || $page>$pages) $page = 1;
+    
+
+    
+    if($all != 1){
+      $start = 1;
+      if($page>1) $start = $page*$limit;
+      $end = ($start+$limit-1);
+      if($end>$count) $end = $count;
+      $seisukohad = array_chunk($seisukohad, $limit);
+      $seisukohad = $seisukohad[$page-1];
+    }else{
+      $start = 1;
+      $end = $count;
+    }
+    
+    $output .= '<ul class="list02">';
+    foreach ($seisukohad as $node) {
+      $output .= '<li><div class="indent clear"><p class="date">' . format_date($node->created, 'custom', 'd.m.Y') . '</p>' . l($node->title, 'node/' . $node->nid) . '</div></li>';
+    }
+    $output .= '</ul>';
+    
+    
+    $query = pager_get_query_parameters();
+    
+    $output .= '<div class="pager clear">';
+    
+    if($all != 1){
+      $output .= '<ul>';
+      if(($page-1)>0){
+        $query['pager'] = ($page-1);
+        $output .= '<li class="prev"><a href="'.url('seisukohad/otsing', array('query' => $query)).'">'.t('Eelmine').'</a></li>';
+      }else{
+        $output .= '<li class="prev"><span>'.t('Eelmine').'</span></li>';
+      }
+  		
+  		$i = 0;
+  		while($i < $pages){
+  		  $query['pager'] = ($i+1);
+  		  $output .= '<li'.($i == $page ? ' class="active"' : '').'><a href="'.url('seisukohad/otsing', array('query' => $query)).'">'.($i+1).'</a></li>';
+  		  $i++;
+  		}
+  		
+      if(($page+1)<=$pages){
+        $query['pager'] = ($page+1);
+        $output .= '<li class="next"><a href="'.url('seisukohad/otsing', array('query' => $query)).'">'.t('Järgmine').'</a></li>';
+      }else{
+        $output .= '<li class="next"><span>'.t('Järgmine').'</span></li>';
+      }
+  		$output .= '</ul>';
+		}
+		
+		$output .= '<p>'.t('Näitan').': '.$start.'-'.$end.' <span>|</span> '.t('Kokku').': '.$count.' <span>|</span> ';
+		
+		if($all != 1){
+  		unset($query['pager']);
+  		$query['all'] = 1;
+  		$output .= '<a href="'.url('seisukohad/otsing', array('query' => $query)).'">'.t('Näita kõiki').'</a></p></div>';
+		}else{
+  		unset($query['pager']);
+  		unset($query['all']);
+  		$output .= '<a href="'.url('seisukohad/otsing', array('query' => $query)).'">'.t('Jaota lehtedeks').'</a></p></div>';
+
+		}
+		
+  }else{
+    $seisukohad = oigus_detailotsing_tulemused(oigus_detailotsing_build_query());
+    if (isset($_GET['dokumendi_liik']) && isset($_GET['valitsemisala'])) {
+      $title1 = array_values(oigus_seisukohad_get_dokumendi_liik($_GET['dokumendi_liik']));
+      $title2 = array_values(oigus_seisukohad_get_valitsemisala($_GET['valitsemisala']));
+      if(isset($title1[0]) && isset($title2[0])) drupal_set_title($title1[0] . ' | ' . $title2[0]);
+    }
+
+    $output = render(drupal_get_form('oigus_seisukohad_kitsendused_form'));
+  
+    foreach ($seisukohad as $aasta => $nodes) {
+      $output .= '<h3>' . $aasta . '</h3><ul class="list02">';
+  
+      foreach ($nodes as $node) {
+        $output .= '<li><div class="indent clear"><p class="date">' . format_date($node->created, 'custom', 'd.m.Y') . '</p>' . l($node->title, 'node/' . $node->nid) . '</div></li>';
+      }
+  
+      $output .= '</ul>';
+    }
+  }
+
+  return $output;
+}
+
+/**
+ * Implements hook_block_info().
+ *
+ * This hook declares what blocks are provided by the module.
+ */
+function oigus_seisukohad_block_info() {
+  $blocks = array();
+
+  $blocks['oigus_seisukohad_uldotsing'] = array(
+    'info' => t('Seisukohad: Üldotsing'),
+    'weight' => -10,
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'status' => TRUE,
+  );
+
+  $blocks['oigus_seisukohad_otsinguvorm'] = array(
+    'info' => t('Seisukohad: Otsing'),
+    'weight' => -10,
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'status' => TRUE,
+  );
+
+  $blocks['oigus_seisukohad_kuud'] = array(
+    'info' => t('Seisukohad: Viimase 12 kuu seisukohad'),
+    'region' => 'sidebar_first',
+    'weight' => -9,
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'pages' => 'seisukohad/viimased-seisukohad',
+    'status' => TRUE,
+  );
+
+  $blocks['oigus_seisukohad_liigid'] = array(
+    'info' => t('Seisukohad: Liigi põhiselt'),
+    'weight' => -10,
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'status' => TRUE,
+  );
+
+  $blocks['oigus_seisukohad_alad'] = array(
+    'info' => t('Seisukohad: Valitsemisala põhiselt'),
+    'weight' => -9,
+    'visibility' => BLOCK_VISIBILITY_LISTED,
+    'status' => TRUE,
+  );
+
+  return $blocks;
+}
+
+/**
+ * Implements hook_block_view().
+ *
+ * This hook generates the contents of the blocks themselves.
+ */
+function oigus_seisukohad_block_view($delta = '') {
+  switch ($delta) {
+    case 'oigus_seisukohad_uldotsing':
+      $block['subject'] = '<none>';
+      $block['content'] = drupal_get_form('oigus_seisukohad_uldotsing_form');
+
+      break;
+    case 'oigus_seisukohad_otsinguvorm':
+      $block['subject'] = '<none>';
+      $block['content'] = drupal_get_form('oigus_seisukohad_otsing_form');
+
+      break;
+    case 'oigus_seisukohad_kuud':
+      $block['subject'] = t('Viimase 12 kuu seisukohad');
+      $block['content'] = array('#markup' => oigus_seisukohad_kuud());
+
+      break;
+    case 'oigus_seisukohad_liigid':
+      $block['subject'] = t('Liigi põhiselt');
+
+      if (isset($_GET['vaade'])) {
+        return $block;;
+      }
+
+      $output = '<ul class="list03 category-select">';
+
+      $dokumendi_liigid = oigus_seisukohad_dokumendi_liigid();
+      $valitsemisala = array_keys(oigus_seisukohad_get_valitsemisala(oigus_detailotsing_get_parameter_value('valitsemisala')));
+
+      foreach ($dokumendi_liigid as $tid => $dokumendi_liik) {
+        $query = array(
+          //'dokumendi_liik' => $tid,
+          'sisutuup' => 'seisukoht',
+        );
+        
+        if (isset($_GET['menetluse_liik'])) {
+          $query['menetluse_liik'] = check_plain($_GET['menetluse_liik']);
+        }
+        if(arg(0) == 'node' && arg(1) == 25) $query['menetluse_liik'] = 3;
+        if(arg(0) == 'node' && arg(1) == 26) $query['menetluse_liik'] = 4;
+        if(arg(0) == 'node' && arg(1) == 27) $query['menetluse_liik'] = 5;
+
+        if (isset($_GET['valitsemisala'])) {
+          $query['valitsemisala'] = $valitsemisala[0];
+        }
+        if (isset($_GET['dokumendi_liik'])) {
+          $liigid = explode('-', check_plain($_GET['dokumendi_liik']));
+          if (in_array($tid, $liigid)){
+            $key = array_search($tid, $liigid);
+            unset($liigid[$key]);
+          }else{
+            $liigid[] = $tid;
+          }
+        }else{
+          $liigid = array($tid);
+        }
+        if(count($liigid)) $query['dokumendi_liik'] = implode('-', $liigid);
+
+        $output .= '<li' . (!in_array($tid, $liigid) ? ' class="active"' : '') . '><a href="' . url('seisukohad/otsing', array('query' => $query)) . '">' . $dokumendi_liik . '</a></li>';
+      }
+
+      $output .= '</ul>';
+
+      $block['content'] = array('#markup' => $output);
+
+      break;
+    case 'oigus_seisukohad_alad':
+      $block['subject'] = t('Valitsemisala põhiselt');
+
+      if (isset($_GET['vaade'])) {
+        return $block;
+      }
+
+      $output = '<ul class="list03 category-select">';
+
+      $valitsemisalad = oigus_seisukohad_valitsemisalad();
+      $dokumendi_liik = array_keys(oigus_seisukohad_get_dokumendi_liik(oigus_detailotsing_get_parameter_value('dokumendi_liik')));
+
+      foreach ($valitsemisalad as $tid => $valitsemisala) {
+        $query = array(
+          //'valitsemisala' => $tid,
+          'sisutuup' => 'seisukoht',
+        );
+        
+        if (isset($_GET['menetluse_liik'])) {
+          $query['menetluse_liik'] = check_plain($_GET['menetluse_liik']);
+        }
+        if(arg(0) == 'node' && arg(1) == 25) $query['menetluse_liik'] = 3;
+        if(arg(0) == 'node' && arg(1) == 26) $query['menetluse_liik'] = 4;
+        if(arg(0) == 'node' && arg(1) == 27) $query['menetluse_liik'] = 5;
+
+        if (isset($_GET['dokumendi_liik'])) {
+          $query['dokumendi_liik'] = $dokumendi_liik[0];
+        }
+        if (isset($_GET['valitsemisala'])) {
+          $alad = explode('-', check_plain($_GET['valitsemisala']));
+          if (in_array($tid, $alad)){
+            $key = array_search($tid, $alad);
+            unset($alad[$key]);
+          }else{
+            $alad[] = $tid;
+          }
+        }else{
+          $alad = array($tid);
+        }
+        if(count($alad)) $query['valitsemisala'] = implode('-', $alad);
+
+        $output .= '<li' . (!in_array($tid, $alad) ? ' class="active"' : '') . '><a href="' . url('seisukohad/otsing', array('query' => $query)) . '">' . $valitsemisala . '</a></li>';
+      }
+
+      $output .= '</ul>';
+
+      $block['content'] = array('#markup' => $output);
+
+      break;
+  }
+
+  return $block;
+}
+
+function oigus_seisukohad_get_dokumendi_liik($tid = NULL) {
+  $liigid = oigus_seisukohad_dokumendi_liigid();
+
+  if (!$liigid) {
+    return;
+  }
+
+  if (!oigus_seisukohad_dokumendi_liik_exists($tid)) {
+    $tid = array_shift(array_keys($liigid));
+  }
+
+  return array($tid => $liigid[$tid]);;
+}
+
+function oigus_seisukohad_get_valitsemisala($tid = NULL) {
+  $valitsemisalad = oigus_seisukohad_valitsemisalad();
+
+  if (!$valitsemisalad) {
+    return;
+  }
+
+  if (!oigus_seisukohad_valitsemisala_exists($tid)) {
+    $tid = array_shift(array_keys($valitsemisalad));
+  }
+
+  return array($tid => $valitsemisalad[$tid]);
+}
+
+function oigus_seisukohad_valitsemisala_exists($tid) {
+  return in_array($tid, array_keys(oigus_seisukohad_valitsemisalad()));
+}
+
+function oigus_seisukohad_dokumendi_liik_exists($tid) {
+  return in_array($tid, array_keys(oigus_seisukohad_dokumendi_liigid()));
+}
+
+function oigus_seisukohad_valitsemisalad() {
+  $valitsemisalad = array();
+
+  $catalog = taxonomy_vocabulary_machine_name_load(variable_get('oigus_seisukohad_valitsemisala', NULL));
+  $tree = taxonomy_get_tree($catalog->vid, 0, NULL, TRUE);
+
+  foreach ($tree as $term){
+    $valitsemisalad[$term->tid] = t($term->name);
+  }
+
+  return $valitsemisalad;
+}
+
+function oigus_seisukohad_dokumendi_liigid() {
+  $dokumendi_liigid = array();
+
+  $catalog = taxonomy_vocabulary_machine_name_load(variable_get('oigus_seisukohad_dokumendi_liik', NULL));
+  $tree = taxonomy_get_tree($catalog->vid, 0, NULL, TRUE);
+
+  foreach ($tree as $term){
+    $dokumendi_liigid[$term->tid] = t($term->name);
+  }
+
+  return $dokumendi_liigid;
+}
+
+function oigus_seisukohad_menetluse_liigid() {
+  $menetluse_liigid = array();
+
+  $catalog = taxonomy_vocabulary_machine_name_load(variable_get('oigus_seisukohad_menetluse_liik', NULL));
+  $tree = taxonomy_get_tree($catalog->vid, 0, NULL, TRUE);
+
+  foreach ($tree as $term){
+    $menetluse_liigid[$term->tid] = t($term->name);
+  }
+
+  return $menetluse_liigid;
+}
+
+function oigus_seisukohad_asutused() {
+  $asutused = array();
+
+  $catalog = taxonomy_vocabulary_machine_name_load(variable_get('oigus_asutus_asutused', NULL));
+  $tree = taxonomy_get_tree($catalog->vid, 0, NULL, TRUE);
+
+  foreach ($tree as $term){
+    $asutused[$term->tid] = t($term->name);
+  }
+
+  return $asutused;
+}
+
+function oigus_seisukohad_sildid() {
+  $sildid = array();
+
+  $catalog = taxonomy_vocabulary_machine_name_load(variable_get('oigus_seisukohad_sildid', NULL));
+  $tree = taxonomy_get_tree($catalog->vid, 0, NULL, TRUE);
+
+  foreach ($tree as $term){
+    $sildid[$term->tid] = t($term->name);
+  }
+
+  return $sildid;
+}
+
+function oigus_seisukohad_aastad() {
+  $parameters = array();
+
+  $parameters['sisutuup'] = 'seisukoht';
+  $parameters['dokumendi_liik'] = oigus_detailotsing_get_parameter_value('dokumendi_liik');
+  $parameters['valitsemisala'] = oigus_detailotsing_get_parameter_value('valitsemisala');
+
+  return drupal_map_assoc(array_keys(oigus_detailotsing_tulemused($parameters)));
+}
+
+function oigus_seisukohad_kuud_count($y, $m) {
+  global $language;
+  $result = db_query("SELECT COUNT(*) as count FROM {node} WHERE type = 'seisukoht' AND status = 1 AND language = :lang AND YEAR(FROM_UNIXTIME(created)) = :y AND MONTH(FROM_UNIXTIME(created)) = :m", array(':lang' => $language->language,':y' => $y, ':m' => $m))->fetchField();
+  return $result;
+}
+
+function oigus_seisukohad_kuud() {
+  $output = '<ul class="list03 category-select">';
+
+  $months = array("January","February","March","April","May","June","July","August","September","October","November","December");
+  $current_year = format_date(time(), 'custom', 'Y');
+  $current_month = format_date(time(), 'custom', 'm');
+
+  $total = 0; $i = 0;
+  while($i < 12){
+    $y = $current_year;
+    $m = $current_month-$i;
+    if($m<=0){
+      $m = $m+12;
+      $y = $y-1;
+    }
+    $c = oigus_seisukohad_kuud_count($y, $m);
+    if($c == 0) {
+/*
+      if ($m == $current_month) {
+        $output .= '<li><a class="list03hover" href="">'.t($months[$m-1]).' <span>('.$c.')</span></a></li>';
+      }
+      else {
+*/
+        $output .= '<li class="disabled">'.t($months[$m-1]).' <span>('.$c.')</span></li>';
+      //}
+    }else{
+      $output .= '<li'.(((arg(1) == 'arhiiv' && arg(2) == $y && arg(3) == $m)) ? ' class="active"' : '').'><a href="'.url('seisukohad/arhiiv/'.$y.'/'.$m).'">'.t($months[$m-1]).' <span>('.$c.')</span></a></li>';
+    }
+    $total = $total + $c;
+    $i++;
+  }
+
+	$output .= '<li'.((arg(1) == 'arhiiv' && arg(2) == '12-kuud') ? ' class="active"' : '').'><a href="'.url('seisukohad/arhiiv/12-kuud').'">'.t('Viimased 12 kuud kokku').' <span>('.$total.')</span></a></li></ul>';
+
+  return $output;
+}

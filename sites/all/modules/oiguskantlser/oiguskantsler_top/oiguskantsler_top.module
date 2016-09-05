@@ -1,0 +1,360 @@
+<?php
+/**
+ * hook_block_info()
+ * 
+ */
+ 
+function oiguskantsler_top_block_info() {
+    
+  $blocks['oiguskantsler_logo'] = array(
+    'info' => t('Õiguskantsler logo block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['oiguskantsler_kontrast'] = array(
+    'info' => t('Õiguskantsler contrast block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['oiguskantsler_language_switch'] = array(
+    'info' => t('Õiguskantsler language switcher block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  $blocks['oiguskantsler_top_bar'] = array(
+    'info' => t('Õiguskantsler Top block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  $blocks['oiguskantsler_top_text_link'] = array(
+    'info' => t('Õiguskantsler Top Text'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  $blocks['oiguskantsler_whole_top'] = array(
+    'info' => t('Õiguskantsler Top'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_top_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_logo':
+            $block['subject'] = t('Menu block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Õiguskantsler logo block: '),
+                '#markup' => oiguskantsler_logo(),
+            );
+            
+            break;
+        case 'oiguskantsler_kontrast':
+            $block['subject'] = t('Menu block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Õiguskantsler kontrast block: '),
+                '#markup' => oiguskantsler_kontrast(),
+        );
+        
+        break;
+        
+        case 'oiguskantsler_top_bar':
+            $block['subject'] = t('Top Bar block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Õiguskantsler Top block: '),
+                '#markup' => oiguskantsler_top(),
+        );
+        
+        break;
+        
+        case 'oiguskantsler_top_text_link':
+            $block['subject'] = t('Oiguskantsler top text block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Oiguskantsler top text block '),
+                '#markup' => oiguskantsler_top_text(),
+        );
+        
+        break;
+        
+        case 'oiguskantsler_language_switcher':
+            $block['subject'] = t('Oiguskantsler language switcher block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Oiguskantsler language switcher block '),
+                '#markup' => oiguskantsler_language_switcher(),
+        );
+        
+        break;
+        
+        case 'oiguskantsler_whole_top':
+            $block['subject'] = t('Oiguskantsler whole top');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Oiguskantsler whole top'),
+                '#markup' => oiguskantsler_whole_top(),
+        );
+        
+        break;
+    }
+
+    
+    
+    return $block;
+}
+function oiguskantsler_logo(){
+   
+    $logo_url = theme_get_setting('logo');
+    
+    global $front;
+    
+    $output='';
+    
+    
+    if(isset($logo_url)):
+        $output.=' <div class="col-xs-6">
+                    <a href="'.url('/').'" class="logo"><img src="'.$logo_url.'"></a>
+                </div>';
+    endif;    
+    
+    return $output;
+}
+function oiguskantsler_kontrast(){
+    $output='';
+    $link_high = l(t('Contrast view'),
+    'javascript:drupalHighContrast.toggleHighContrast()', array(
+      'fragment' => '',
+      'external' => TRUE,
+      'attributes' => array (
+                            'class' => 'contrast_changer',
+                            
+                            'data-name' => 'normal_contrast',
+                        ),
+    )
+  );
+  $theme_path = drupal_get_path('theme', variable_get('theme_default', NULL));
+  $output.=$link_high;
+  return $output;
+
+}
+function oiguskantsler_top(){
+    $output='';
+    $logo_block = module_invoke('oiguskantsler_top','block_view','oiguskantsler_logo');/////////Logo
+    $contrast_block = module_invoke('oiguskantsler_top','block_view','oiguskantsler_kontrast');//////////Contrast toggle
+    //$language_block = module_invoke('oiguskantsler_top','block_view','oiguskantsler_language_switcher');//////////Contrast toggle
+    $block = module_invoke('locale', 'block_view', 'language');
+    $language_block = new_language_block();
+    
+ //print $block['content'];
+    $output.='<div class="container">
+            <div class="row">
+                '.$logo_block['content']['#markup'].'
+
+                <div class="col-xs-6 text-right">
+                    <nav class="navbar navbar-top">
+                        ';
+                        if(!empty($block)):
+                            $output.=$language_block;
+                        endif;    
+    $output.='
+                        <ul class="nav navbar-nav navbar-right hidden-xs">
+                         ';
+                         theme_oiguskantsler_theme_resize();
+                         
+                         $output.='
+                            <li class="active">'.t('<a href="javascript:;" class="changer to_big" id="text_resize_increase"><sup></sup>A</a><div id="text_resize_clear"></div>').'</li>
+
+                            <li>'.t('<a href="javascript:;" class="changer to_normal" id="text_resize_reset">A</a>').'</li>
+
+                            <li>'.t('<a href="javascript:;" class="changer to_small" id="text_resize_decrease"><sup></sup>A</a>').' </li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right hidden-xs">
+                            <li>'.$contrast_block['content']['#markup'].'</li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>';
+    return $output;
+}
+
+function oiguskantsler_language_switcher(){
+    $output='';
+
+  // Switch to FALSE to get an english-only menu
+$use_native = FALSE; 
+
+//*************************************
+// DON'T EDIT BELOW THIS LINE
+global $language;
+$languages  = language_list();
+$active     = "";
+
+
+// Must remove this from URL before passing to l()
+$active_langs = array_keys($languages);       // Get an array of lang objects
+$prefix       = "/".$language->language."/";  // Build the active lang prefix
+$path         = request_uri();                // Get the current URL
+dpm($path);
+if ( strpos($path, $prefix) !== FALSE ) {
+  // Active path carries a language prefix, remove it
+  $path = substr($path, strlen($prefix));
+} else {
+  // Even with no prefix, must remove starting '/' to allow Drupal
+  // to recognise the path as internal
+  $path = substr($path, 1); 
+}
+
+// At this point you have the clear relative path to the current page, 
+//  eg "content/my-cool-story"
+
+$output.='<ul class="nav navbar-nav language-menu navbar-right">';
+$i=0;
+foreach ( $languages as $lang) {
+  // Add an aditional class to apply CSS to active language
+  if ( $language->language == $lang->language ) { 
+    $active = " active"; 
+  } else {
+    $active = "";
+  }
+  // Choose language label
+  if ( $use_native ) { 
+    $label = $lang->native;
+  } else {
+    $label = $lang->name;
+  }
+  if($i==0){
+    $output.= '<li class="first active">'.l($label, $path, array('language'=>$lang)).'</li>';
+  }
+  else{
+    $output.= '<li class="first">'.l($label, $path, array('language'=>$lang)).'</li>';
+  }
+    $i++;
+}
+$output.='</ul>';
+return $output;
+  
+}
+
+function oiguskantsler_top_text(){
+  
+  $top_text= variable_get('front_page_top_text');
+  
+  $output='
+            <div class="slogan">
+                '.$top_text['value'].'<a href="'.url('node/17825').'" class="btn btn-primary btn-header">'.t('PETITION TO THE CHANCELLOR OF JUSTICE ').'</a>
+            </div>
+        ';
+  return $output;
+  
+  
+}
+function oiguskantsler_whole_top(){
+  $output='';
+  $top_bar=module_invoke('oiguskantsler_top','block_view','oiguskantsler_top_bar');
+  $top_text = module_invoke('oiguskantsler_top','block_view','oiguskantsler_top_text_link');
+  $top_main_menu = module_invoke('oiguskantsler_menu','block_view','Oiguskantlser_menu');
+  
+  $output.='
+  <div class="container">
+    <div class="row">
+      '.$top_bar['content']['#markup'].'
+      
+    </div>
+    
+  </div>';
+  
+  if(drupal_is_front_page()==1):
+  if(!empty($top_text)):
+  $output.='
+  <div class="text-center">
+          '.$top_text['content']['#markup'].'  
+  </div>';
+  endif;
+  endif;
+  if(!empty($top_main_menu)):
+  $output.='
+         
+         '.$top_main_menu['content']['#markup'].'
+          ';
+     endif; 
+  return $output;
+  
+}
+function new_language_block(){
+  
+  global $base_root;
+  global $language;
+  $languages=language_list();
+  
+  $output='<ul class="nav navbar-nav navbar-right">';
+                    
+  
+  foreach ($languages as $language_from) {
+    
+    if($language_from->language==$language->language){
+      
+      $class = 'active';
+      
+    }
+    else{
+      
+      $class = '';
+      
+    }
+    
+    $output.='<li><a href = "/'.$language_from->language.'" class="'.$class.'">'.$language_from->name.'</a></li>';
+    // code...
+  }
+  
+  $output.= '</ul>';
+  
+  
+  return($output);
+
+  
+}
+function theme_oiguskantsler_theme_resize(){
+
+
+  // Add js, css, and library
+  $content = array(
+    '#attached' => array(
+      'js' => array(
+        array(
+          'data' => "var text_resize_scope = " . drupal_json_encode(variable_get('text_resize_scope', 'main')) . ";
+          var text_resize_minimum = " . drupal_json_encode(variable_get('text_resize_minimum', '12')) . ";
+          var text_resize_maximum = " . drupal_json_encode(variable_get('text_resize_maximum', '25')) . ";
+          var text_resize_line_height_allow = " . drupal_json_encode(variable_get('text_resize_line_height_allow', FALSE)) . ";
+          var text_resize_line_height_min = " . drupal_json_encode(variable_get('text_resize_line_height_min', 16)) . ";
+          var text_resize_line_height_max = " . drupal_json_encode(variable_get('text_resize_line_height_max', 36)) . ";",
+          'type' => 'inline',
+        ),
+        array(
+          'data' => drupal_get_path('module', 'text_resize') . '/text_resize.js',
+          'type' => 'file',
+        )
+      ),
+      'css' => array(
+        drupal_get_path('module', 'text_resize') . '/text_resize.css',
+      ),
+      'library' => array(
+        array('system', 'jquery.cookie')
+      ),
+    ),
+  );
+  
+  return render($content);
+
+
+}

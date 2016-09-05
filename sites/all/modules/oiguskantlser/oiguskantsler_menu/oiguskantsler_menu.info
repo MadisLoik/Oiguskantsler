@@ -1,0 +1,4 @@
+name = Õiguskantlser menu module
+description = Menu creator for Õiguskantlser
+core = 7.x
+

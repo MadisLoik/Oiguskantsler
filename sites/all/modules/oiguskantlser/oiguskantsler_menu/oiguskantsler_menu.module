@@ -1,0 +1,799 @@
+<?php
+/**
+ * hook_block_info()
+ * 
+ */
+ 
+function oiguskantsler_menu_block_info() {
+    
+    $blocks['Oiguskantlser_menu'] = array(
+    'info' => t('Õiguskantsler menu block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_menu_viited'] = array(
+    'info' => t('Õiguskantsler menu  viited block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_menu_koned'] = array(
+    'info' => t('Õiguskantsler menu  avalikkuse block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_ulejaanud_menu'] = array(
+    'info' => t('Õiguskantsler menu ylesannete block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_ok_menu'] = array(
+    'info' => t('Õiguskantsler menu  oiguskaitse block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_ln_menu'] = array(
+    'info' => t('Õiguskantsler menu  laste noorte block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_vk_menu'] = array(
+    'info' => t('Õiguskantsler menu  väärkohtlemine block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_aastate_menu'] = array(
+    'info' => t('Õiguskantsler aastate block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_koostoo_menu'] = array(
+    'info' => t('Õiguskantsler koostöö block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_uldinfo_menu'] = array(
+    'info' => t('Õiguskantsler üldinfo menüü block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_vene_kantsler_menu'] = array(
+    'info' => t('Õiguskantsler  Kанцлер права menüü block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_vene_teine_menu'] = array(
+    'info' => t('Õiguskantsler  Vene teine block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_vene_kolmas_menu'] = array(
+    'info' => t('Õiguskantsler  Vene kolmas block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  $blocks['Oiguskantlser_avaldus_menu'] = array(
+    'info' => t('Õiguskantsler  avaldus block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_menu_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'Oiguskantlser_menu':
+            $block['subject'] = t('Menu block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Main-menu block: '),
+                '#markup' => Oiguskantlser_menu(),
+            );
+            
+            
+            
+            break;
+        case 'Oiguskantlser_menu_viited':
+            $block['subject'] = t('Menu viited block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  viited block: '),
+                '#markup' => Oiguskantlser_menu_viited(),
+            );
+            
+            
+            
+            break;
+        case 'Oiguskantlser_menu_koned':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_menu_koned(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_ulejaanud_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_ulejaanud_menu(),
+            );
+            
+            
+            
+            break;case 'Oiguskantlser_ok_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_ok_menu(),
+            );
+            
+            break;case 'Oiguskantlser_ln_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_ln_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_vk_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_vk_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_aastate_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_aastate_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_koostoo_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_koostoo_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_uldinfo_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  koned block: '),
+                '#markup' => Oiguskantlser_uldinfo_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_vene_kantsler_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  vene 1 block: '),
+                '#markup' => Oiguskantlser_vene_kantsler_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_vene_teine_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  vene 1 block: '),
+                '#markup' => Oiguskantlser_vene_2_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_vene_kolmas_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  vene 1 block: '),
+                '#markup' => Oiguskantlser_vene_3_menu(),
+            );
+            
+            
+            
+            break;
+            case 'Oiguskantlser_avaldus_menu':
+            $block['subject'] = t('Menu koned block');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Menu  Avaldus block: '),
+                '#markup' => Oiguskantlser_avaldus_menu(),
+            );
+            
+            
+            
+            break;
+    }
+    
+    
+    
+    return $block;
+}
+function Oiguskantlser_menu(){
+      
+      global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('main-menu');
+      
+      $output.= '  <nav class="navbar navbar-main">
+            <div class="container">';
+      
+      foreach ($main_menu_tree as $menu_link) {
+          
+         if($language->language==$menu_link['link']['language']){
+             if(isset($menu_link['link']['options']['content']['image'])){
+                 
+                $image=file_load($menu_link['link']['options']['content']['image']);
+                
+                if(!empty($image)){
+                    
+                    $image_url = file_create_url($image->uri);
+                    
+                    
+                }
+                
+                if(isset( $menu_link['link']['localized_options']['item_attributes']['class'])){
+                    
+                    $link_class=$menu_link['link']['localized_options']['item_attributes']['class'];
+                    
+                }
+                else{
+                    
+                    $link_class='';
+                    
+                }
+                
+                $output.='
+                <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse" aria-expanded="false">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button><a class="navbar-brand" href="'.url('/').'">'; 
+                if(isset($image_url)){
+                    
+                    $output.='<img src="'.$image_url.'" height="100%">';
+                    
+                }
+                $output.='</a>
+                </div>'; 
+                break; 
+             }
+             
+             
+         }
+         
+      }
+      $output.='<div class="collapse navbar-collapse" id="bs-navbar-collapse">
+                    <ul class="nav navbar-nav navbar-center">';
+                    
+                    foreach ($main_menu_tree as $menu_item) {
+                        $true_item=$menu_item['link'];
+                          
+                        if($true_item['language']==$language->language){
+                            
+                            
+          
+                            
+                           if($menu_item['link']['href']!='<front>'){
+                            
+                            if($language->language=='ru'){
+                                
+                              $output.=' <li class="">
+                            
+                            
+                            <a href="'.url($true_item['link_path']).'" class="normal_link" data-toggle="">'.$true_item['title'].'</a>';  
+                                
+                            }
+                             else{  
+                             $output.=' <li class="dropdown">
+                            
+                            
+                            <a href="#" class="dropdown-toggle level1" data-toggle="dropdown">'.$true_item['title'].'</a>';
+                            
+                            if(!empty($menu_item['below'])){
+                                $output.='
+                                <div class="dropdown-menu">
+                                
+                                
+                                <div class="container">
+                                    <div class="row">';
+                                foreach ($menu_item['below'] as $under_main) {
+                                    
+                                    $output.='
+                                        <div class="col-lg-fifth">
+                                            <a href="'.url($under_main['link']['link_path']).'">'.$under_main['link']['title'].'</a>
+                                            
+                                            ';
+                                            
+                                            if(isset($under_main['link']['localized_options']['attributes']['title'])){
+                                                
+                                                $output.='<p class="hidden-xs">'.$under_main['link']['localized_options']['attributes']['title'].'</p>';
+                                                
+                                            }
+                                            
+                                            $output.='</div>'                            ;
+                                }
+                                $output.=' </div>
+                                </div>
+                                </div>';
+                            }
+                             }
+                            $output.='
+                           
+                        </li>';
+
+                    
+                               
+                           }
+                            
+                        }
+                        
+                    }  
+                    
+              $form_search=drupal_get_form('apache_search_block'); 
+              $printable=drupal_render($form_search);
+              $fb_link = variable_get('fb_oigus');
+              
+            $tw_link = variable_get('tw_oigus');
+            
+            if(!empty($fb_link)):
+                $fb_link='<li><a href="'.$fb_link.'"><span><i class="fa fa-facebook" aria-hidden="true"></i></span></a></li>';
+                else:
+                    $fb_link='';
+                endif;
+                if(!empty($tw_link)):
+                $tw_link='<li><a href="'.$tw_link.'"><span><i class="fa fa-twitter" aria-hidden="true"></i></span></a></li>';
+                else:
+                    $tw_link='';
+                endif;
+      $output.='<li class="menu-search">'.$printable.'</li>';        
+      $output.='</ul><ul class="nav navbar-nav navbar-right social-links hidden-xs">
+                    '.$fb_link.$tw_link.'
+					</ul></div>';
+      
+      
+      $output.='</div></nav>';
+      
+      
+    
+    return $output;
+    
+    
+}
+function Oiguskantlser_menu_viited(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-men-viited');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.$value['link']['link_path'].'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     dpm($main_menu_tree);
+}
+function Oiguskantlser_menu_koned(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-avalike-suhete-men-');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_ok_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-p-hi-iguste-kaitse');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_uldinfo_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu--ldinfo-lingid');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_vk_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-v-rkohtlemise-ennetamine-');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_aastate_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-aasta-men-');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_koostoo_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-koostoo-lingid');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_ln_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-laste-ja-noorte-igused');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_ulejaanud_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu--lesannete-lingid');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['link_title']=='Põhiseaduslikkuse järelevalve'){
+              foreach ($value['below'] as $value_new) {
+                  if($value_new['link']['language']==$language->language){
+                   $output.=' <li><a href="'.url($value_new['link']['link_path']).'">'.$value_new['link']['link_title'].'</a></li>';
+                  }
+              }
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+
+function Oiguskantlser_vene_kantsler_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-vene-iguskantsler-vasak');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_vene_2_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-vene2menyy');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_vene_3_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-vene3menyy');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+function Oiguskantlser_avaldus_menu(){
+    
+     global $language;
+      
+      $output='';
+      
+      $main_menu_tree = menu_tree_all_data('menu-avalduse-vasak-men-');
+      
+      $output='<ul class="sidemenu">';
+      
+      foreach ($main_menu_tree as $value) {
+          
+          if($value['link']['language']==$language->language){
+              
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
+              
+          }
+          
+      }
+      
+      $output.='</ul>';
+      
+      
+     return $output; 
+     
+}
+
+function apache_search_block($form, &$form_state){
+	
+	
+	
+
+	$form=array(
+		'#type'   => 'form', 
+		'#attributes' => array(
+				'class'=> array(
+						0 => 'searchform',
+						
+				),
+				'style' => array(
+						
+						0 => '', 
+						
+				),
+		
+		),
+
+	);
+	$form['submit'] = array(
+	        '#attributes' => array(
+	            
+	            'style' => 'display:inline'
+	            
+	            ),
+			'#theme_wrapers'=> array(),
+			'#type'   => 'submit',
+			'#value'  => '<i class="fa fa-search" aria-hidden="true"></i>',
+	);
+	$form['input'] = array(
+			'#attributes' => array(
+			    
+			    'placeholder' => t('Search'),
+			    
+			    'style' => 'display:inline'
+			    
+			    
+			    ),
+			'#theme_wrappers' => array(),
+			'#type' => 'textfield',
+			'#size' => 50,
+			'#required' => TRUE,
+	);
+	
+	$form['#submit'] = array(
+			
+			0 => 'oiguskantsler_search_submit',
+			
+	);
+	$form['#id'] = 'search-form';
+	$form['#search_page']['page_id'] = 'toodete_otsing';
+	$element = &$form['keys']['input'];
+	
+	
+	
+	
+	return $form;
+	
+	
+}
+function oiguskantsler_search_submit($form,&$form_state){
+	
+	
+	drupal_goto('search/otsing/' . $form_state['values']['input']);
+	
+}

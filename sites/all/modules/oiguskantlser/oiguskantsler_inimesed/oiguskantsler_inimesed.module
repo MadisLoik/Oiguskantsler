@@ -1,0 +1,796 @@
+<?php
+
+
+
+ 
+function oiguskantsler_inimesed_block_info() {
+    
+    $blocks['oiguskantsler_tabel'] = array(
+    'info' => t('Inimesed tabeli kujul'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_inimesed_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_tabel':
+            $block['subject'] = '<none>';
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Footer'),
+                '#markup' => oiguskantsler_inimesed(),
+            );
+            
+            
+            
+            break;
+   
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_inimesed(){
+    
+    global $language;
+    
+    
+    $n_e=variable_get('personal_n_kirjeldus');
+    $n_i=variable_get('personal_n_inglise_kirjeldus');
+    $n_v=variable_get('personal_n_vene_kirjeldus');
+    
+    $keel=$language->language;
+    
+    if($language->language=='et' and !empty($n_e)){
+        
+    $n_ike_kiri=$n_e['value'];
+        
+    }
+    if($language->language=='en' and !empty($n_i)){
+        
+    $n_ike_kiri=$n_i['value'];
+        
+    }
+    if($language->language=='ru' and !empty($n_v)){
+        
+    $n_ike_kiri=$n_v['value'];
+        
+    }
+    
+    $tyyp='persoon';
+    
+    $query = db_select('node','n')
+     ->condition('n.type',$tyyp)
+     ->condition('n.language',$keel)
+     ->fields('n');
+     
+     $result = $query->execute();
+     
+     $suured_persoonid='<div class="container-fluid">
+                        <div class="row">';
+     $image_style='t__taja_n_unikes';
+     
+     $osakonnata='';
+     
+     $osakonnata.='<h1>'.t('Advisers( Table format)').'</h1>';
+     
+     if(!empty($n_ike_kiri)){
+        $osakonnata.=$n_ike_kiri;
+     }
+     
+     $osakonnata.='<div class="container-fluid"><table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Nimi</th>
+
+                                    <th scope="col">Ametinimetus</th>
+
+                                    <th scope="col">E-post</th>
+
+                                    <th scope="col">Telefon</th>
+                                </tr>
+                            </thead>
+                            <tbody>';
+     
+     $suur_persoon=array();
+     
+     while($record = $result->fetchAssoc()) {
+         
+         $full_tootaja = node_load($record['nid']); 
+         
+         if(!empty($full_tootaja->field_osakond['und'][0]['value'])){
+          $osakond = $full_tootaja->field_osakond['und'][0]['value'];
+          
+          if(isset($osakond)){
+             
+             if($osakond=='sots'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            &#160;
+                                        </div>
+
+                                        <h3>'.t('Social Rights Department').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_o_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_o_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_o_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+             elseif($osakond=='ettev'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            &#160;
+                                        </div>
+
+                                        <h3>'.t('Business Environment Department').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_ek_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_ek_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_ek_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+             elseif($osakond=='okord'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            &#160;
+                                        </div>
+
+                                        <h3>'.t('Law Enforcement  Affairs Department').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_ok_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_ok_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_ok_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+             elseif($osakond=='kaigud'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            &#160;
+                                        </div>
+
+                                        <h3>'.t('Inspection Visits Department').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_kk_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_kk_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_kk_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+             elseif($osakond=='lapsed'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            &#160;
+                                        </div>
+
+                                        <h3>'.t('Children\'s and Youth Rights Department').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_lno_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_lno_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_lno_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+             elseif($osakond=='yld'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            &#160;
+                                        </div>
+
+                                        <h3>'.t('General Department ').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_yo_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_yo_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_yo_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+             elseif($osakond=='oigus'){
+                 
+                 $osakonnata.='<tr>
+                                    <td colspan="4">
+                                        <div>
+                                            
+                                        </div>
+
+                                        <h3>'.t('Legal Service').'</h3>
+                                    </td>
+                                </tr>';
+                 
+                 if($keel=='et'){
+                     
+                     $vahe= variable_get('personal_s_ot_e');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='en'){
+                     
+                     $vahe= variable_get('personal_s_ot_i');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                 elseif($keel=='ru'){
+                     
+                     $vahe= variable_get('personal_s_ot_v');
+                     
+                     if(!empty($vahe)){
+                         
+                         $osakonnata.=' <tr>
+                                    <td colspan="4">'.$vahe['value'].'</td></tr>';
+                         
+                     }
+                 }
+                     
+                     $osakonnata.='
+         
+                     <tr>
+                     <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+                     
+                     if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_email['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+                         
+                     $osakonnata.='
+                     <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+                         
+                     }
+                     
+                     
+                     $osakonnata.='
+                  
+                     </tr>
+            
+                     
+                     ';
+            
+                                 
+                     
+                 
+                 
+             } 
+             
+              
+          }
+          
+         }
+         else{
+             
+         $osakonnata.='
+         
+         <tr>
+         <td><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></td>';
+         
+         if(!empty($full_tootaja->field_t_['und'][0]['value'])){
+             
+         $osakonnata.='
+         <td>'.$full_tootaja->field_t_['und'][0]['value'].'</td>';
+             
+         }
+         if(!empty($full_tootaja->field_email['und'][0]['value'])){
+             
+         $osakonnata.='
+         <td><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></td>';
+             
+         }
+         if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+             
+         $osakonnata.='
+         <td><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></td>';
+             
+         }
+         
+         
+         $osakonnata.='
+      
+         </tr>
+
+         
+         ';
+              
+         }
+         $jkr=$full_tootaja->field_j_rjekord['und'][0]['value'];
+         
+         
+         
+         
+         $persoon_url=image_style_url($image_style, ($full_tootaja->field_persooni_pilt['und'][0]['uri']));
+         
+         $suur_persoon[$jkr].='<div class="col-lg-4">
+                                <div class="contact suuruse_maaramine">';
+                                
+         if (isset($persoon_url)) {
+            $suur_persoon[$jkr].='<a href="'.url('node/'.$full_tootaja->nid).'"><img src="'.$persoon_url.'" class="img-responsive"></a>';
+         }                       
+                                   
+        if(url('node/'.$full_tootaja->nid)!='<none>'):
+        $suur_persoon[$jkr].='                            <h2><a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->title.'</a></h2>';
+        endif;
+         if(!empty($full_tootaja->field_l_hike_kirjeldus['und'][0]['value'])){
+            
+            $suur_persoon[$jkr].='<a href="'.url('node/'.$full_tootaja->nid).'">'.$full_tootaja->field_l_hike_kirjeldus['und'][0]['value'].'</a>';
+            
+        } 
+       
+
+        $suur_persoon[$jkr].='                             <ul>';
+                                         if(!empty($full_tootaja->field_email['und'][0]['value'])){
+            
+            $suur_persoon[$jkr].='<li><a href="mailto:'.$full_tootaja->field_email['und'][0]['value'].'">'.$full_tootaja->field_email['und'][0]['value'].'</a></li>';
+            
+        } 
+                                         if(!empty($full_tootaja->field_telefon['und'][0]['value'])){
+            
+            $suur_persoon[$jkr].='<li><a href="tel:'.$full_tootaja->field_telefon['und'][0]['value'].'">'.$full_tootaja->field_telefon['und'][0]['value'].'</a></li>';
+            
+        } 
+
+         $suur_persoon[$jkr].=' 
+                                    </ul>
+                                </div>
+                            </div>';
+           
+     }
+     ksort($suur_persoon);
+    
+    foreach ($suur_persoon as $value) {
+       $suured_persoonid.=$value;
+    }
+    $suured_persoonid.='</div></div>';
+    $osakonnata.='</table>';
+    return $suured_persoonid.$osakonnata;
+    
+}

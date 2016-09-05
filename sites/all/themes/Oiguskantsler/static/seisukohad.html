@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+
+    <title>Õiguskantsler</title>
+    <link rel="icon" href="favicon.ico?v=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/animate.css">
+    <link rel="stylesheet" type="text/css" href="css/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="css/lightbox.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="stylesheet" type="text/css" href="css/responsive.css">
+</head>
+
+<body class="content">
+    <header>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-6">
+                    <a href="http://oiguskantsler.barn.ee" class="logo"><img src="images/vapp-header.png"></a>
+                </div>
+
+                <div class="col-xs-6 text-right">
+                    <nav class="navbar navbar-top">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="/en/">ENG</a></li>
+
+                            <li class="active"><a href="/et/">EST</a></li>
+
+                            <li><a href="/ru/">RUS</a></li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right hidden-xs">
+                            <li class="active"><a href="#" id="text-size-xl">A</a></li>
+
+                            <li><a href="#" id="text-size-lg">A</a></li>
+
+                            <li><a href="#" id="text-size-sm">A</a></li>
+                        </ul>
+
+                        <ul class="nav navbar-nav navbar-right hidden-xs">
+                            <li><a href="?id=10591&kontrastvaade=1">Kontrastvaade</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <nav class="navbar navbar-main">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse" aria-expanded="false"><span class="sr-only">Toggle navigation</span></button> <a class="navbar-brand" href=""><img src="images/vapp-valge.png" height="100%"></a>
+                </div>
+
+                <div class="collapse navbar-collapse" id="bs-navbar-collapse">
+                    <ul class="nav navbar-nav navbar-center">
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle level1" data-toggle="dropdown">Õiguskantsler</a>
+
+                            <div class="dropdown-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-fifth">
+                                            <a href="/oiguskantsler-ulle-madise/">Õiguskantsler Ülle Madise</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/pohiseaduse-kaitse/">Põhiseaduse kaitse</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/koned-artiklid-intervjuud/">Kõned, artiklid intervjuud</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/institutsiooni-ajalugu/">Institutsiooni ajalugu</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/eelmised-oiguskantslerid/">Eelmised õiguskantslerid</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle level1" data-toggle="dropdown">Ülesanded</a>
+
+                            <div class="dropdown-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-fifth">
+                                            <a href="/pohiseaduslikkuse-jarelevalve/">Põhiseaduslikkuse järelevalve</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/pohioiguste-kaitse/">Põhiõiguste kaitse</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/laste-ja-noorte-oigused/">Laste ja noorte õigused</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/vaarkohtlemise-ennetamine/">Väärkohtlemise ennetamine</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/teised-ulesanded/">Teised ülesanded</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle level1 active" data-toggle="dropdown">Tegevused</a>
+
+                            <div class="dropdown-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-fifth">
+                                            <a href="/seisukohad/">Seisukohad</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/aasta-ulevaated/">Aasta ülevaated</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/artiklid-intervjuud-koned/">Artiklid, intervjuud, kõned</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/rahvusvaheline-koostoo/">Rahvusvaheline koostöö</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/algatused/">Algatused</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle level1" data-toggle="dropdown">Ametkond</a>
+
+                            <div class="dropdown-menu">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-fifth">
+                                            <a href="/nounikud/">Nõunikud</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/asukoht/">Asukoht</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/avalikteave/">Avalikteave</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/maja-ajalugu/">Maja ajalugu</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+
+                                        <div class="col-lg-fifth">
+                                            <a href="/galerii/">Galerii</a>
+
+                                            <p class="hidden-xs">Siia on võimalik kirjutada selle menüüpunkti kohta väikese tutvustuse.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="menu-search">
+                            <form method="get">
+                                <input type="hidden" name="op" value="search"> <input type="text" value="" placeholder="Otsing">
+                            </form>
+                        </li>
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right social-links hidden-xs">
+                        <li><a href="#"></a></li>
+
+                        <li><a href="#"></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section style="overflow: hidden;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <ul class="sidemenu">
+                        <li><a href="#">Viimased seisukohad</a></li>
+
+                        <li><a href="#">Põhiseaduslikkuse järelevalve</a></li>
+
+                        <li><a href="#">Põhiõiguste kaitse</a></li>
+
+                        <li><a href="#">Muud ülesanded</a></li>
+                    </ul>
+
+                    <div class="sidepanel">
+                        <h2 class="title">Otsi</h2>
+
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form>
+                                    <div class="form-group">
+                                        <label for="tagword">Märksõna</label> <input type="text" class="form-control" id="tagword" placeholder="Märksõna">
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="form-group col-lg-6">
+                                            <label for="datefrom">Alates</label> <input type="text" class="form-control" id="datefrom" placeholder="Alates">
+                                        </div>
+
+                                        <div class="form-group col-lg-6">
+                                            <label for="dateto">Kuni</label> <input type="text" class="form-control" id="dateto" placeholder="Kuni">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="menetluseliik">Menetluse liik</label> <select id="menetluseliik" class="form-control">
+                                            <option>
+                                                Kõik
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="valitsemisala">Valitsemisala</label> <select id="valitsemisala" class="form-control">
+                                            <option>
+                                                Kõik
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="asutus">Asutus</label> <select id="asutus" class="form-control">
+                                            <option>
+                                                Kõik
+                                            </option>
+                                        </select>
+                                    </div><button type="submit" class="btn btn-default">Otsi</button> <a href="#" class="btn btn-link">Tühista</a>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sidepanel">
+                        <h2 class="title">Viimase 12 kuu seisukohad</h2>
+
+                        <div class="list-group">
+                            <a href="#" class="list-group-item"><span class="badge">12</span>August</a> <a href="#" class="list-group-item"><span class="badge">5</span>Juuli</a> <a href="#" class="list-group-item"><span class="badge">19</span>Juuni</a> <a href="#" class="list-group-item"><span class="badge">36</span>Mai</a> <a href="#" class="list-group-item"><span class="badge">26</span>Aprill</a> <a href="#" class="list-group-item"><span class="badge">14</span>Märts</a> <a href="#" class="list-group-item"><span class="badge">21</span>Veebruar</a> <a href="#" class="list-group-item"><span class="badge">21</span>Detsember</a> <a href="#" class="list-group-item"><span class="badge">34</span>November</a> <a href="#" class="list-group-item"><span class="badge">29</span>Oktoober</a> <a href="#" class="list-group-item"><span class="badge">30</span>September</a> <a href="#" class="list-group-item"><span class="badge">256</span>Viimased 12 kuud kokku</a>
+                        </div>
+                    </div>
+
+                    <ul class="sidemenu"></ul>
+                </div>
+
+                <div class="col-lg-9">
+                    <form class="pull-right">
+                        <div class="form-group">
+                            <label>Kitsenda tulemusi</label><br>
+
+                            <div class="btn-group" role="group">
+                                <button type="button" class="btn btn-default">2014</button> <button type="button" class="btn btn-default">2015</button> <button type="button" class="btn btn-default">2016</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <article>
+                        <h1 style="padding-top: 0;">Seisukohad (320)</h1>
+
+                        <table class="table">
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td><span class="date">13.07.2016</span></td>
+
+                                <td>
+                                    <h3>Arvamus Riigikohtule: karistusseadustiku muutmise ja sellega seonduvalt teiste seaduste muutmise seaduse eelnõu kohta</h3>
+
+                                    <div class="tags">
+                                        <a href="#">Põhiseaduslikkuse järelevalve</a> <a href="#">Justiitsministeerium</a>
+                                    </div>
+
+                                    <p class="small">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud.</p>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <nav>
+                            <ul class="pagination">
+                                <li><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+
+                                <li><a href="#">1</a></li>
+
+                                <li><a href="#">2</a></li>
+
+                                <li><a href="#">3</a></li>
+
+                                <li><a href="#">4</a></li>
+
+                                <li><a href="#">5</a></li>
+
+                                <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                            </ul>
+                        </nav>
+                    </article>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-4">
+                    <h2>Uudised</h2>
+
+                    <ul>
+                        <li><a href="#">Ülle Madise: vähem norme, rohkem tervet mõistust</a> <span class="date">17. Mai 2016</span></li>
+
+                        <li><a href="#">Lastekaitsepäeval jagati „Lastega ja lastele“ tunnustusauhindasid</a> <span class="date">17. Mai 2016</span></li>
+
+                        <li><a href="#">Riigikogu toetas kahte õiguskantsleri ettepanekuid</a> <span class="date">17. Mai 2016</span></li>
+                    </ul>
+                </div>
+
+                <div class="col col-lg-4">
+                    <h2>Viimased seisukohad</h2>
+
+                    <ul>
+                        <li><a href="#">Õigusriigi põhimõte, eesmärgipärasus ja efektiivsus õigusloomes</a> <span class="date">17. Mai 2016</span></li>
+
+                        <li><a href="#">Mootorsõiduki juhi kohustus hüvitada jalakäijale tekitatud kahju</a> <span class="date">17. Mai 2016</span></li>
+
+                        <li><a href="#">Kontrolltööde planeerimine koolis</a> <span class="date">17. Mai 2016</span></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h2>Kontakt</h2>
+
+                    <p>Kohtu 8, 15193 Tallinn<br>
+                    (+372) 693 8404<br>
+                    info@oiguskantsler.ee</p><br>
+
+                    <p><img src="images/vapp-footer.png"></p><span class="copyright">Õiguskantsler.ee 2016</span>
+                </div>
+            </div>
+        </div>
+    </footer><script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js" type="text/javascript">
+</script><script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js" type="text/javascript">
+</script><script src="js/parallax.min.js" type="text/javascript">
+</script><script src="js/moment.min.js" type="text/javascript">
+</script><script src="js/daterangepicker.js" type="text/javascript">
+</script><script src="js/lightbox.min.js" type="text/javascript">
+</script><script src="js/scripts.js" type="text/javascript">
+</script>
+</body>
+</html>

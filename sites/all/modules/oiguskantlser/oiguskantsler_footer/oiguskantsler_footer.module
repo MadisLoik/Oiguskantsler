@@ -1,0 +1,112 @@
+<?php
+
+ 
+function oiguskantsler_footer_block_info() {
+    
+    $blocks['oiguskantsler_footer'] = array(
+    'info' => t('Õiguskantsler jaluse block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_footer_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_footer':
+            $block['subject'] = t('Jalus ');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Footer'),
+                '#markup' => oiguskantsler_footer(),
+            );
+            
+            
+            
+            break;
+       
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_footer(){
+    global $language;
+    
+    $query = db_select('node','n')
+     ->condition('n.type','uudis')
+     ->condition('n.language',$language->language)
+     ->orderBy('created', 'DESC')//ORDER BY created
+     ->fields('n')
+     ->range(0,3);
+     $result = $query->execute();
+     $output='';
+     $number_of_news=5;
+     $type=2;
+     $list='';
+     while($record = $result->fetchAssoc()) {
+         $list.='<li><a href="'.url('node/'.$record['nid']).'">'.$record['title'].'</a> <span class="date">'.date('d.M.Y',$record['created']).'</span></li>';
+     }
+     $query = db_select('node','n')
+     ->condition('n.type','seisukoht')
+     ->condition('n.language',$language->language)
+     ->orderBy('created', 'DESC')//ORDER BY created
+     ->fields('n')
+     ->range(0,3);
+     $result = $query->execute();
+     $output='';
+     $number_of_news=5;
+     $type=2;
+     $list_seisukohad='';
+     while($record = $result->fetchAssoc()) {
+         $list_seisukohad.='<li><a href="'.url('node/'.$record['nid']).'">'.$record['title'].'</a> <span class="date">'.date('d.M.Y',$record['created']).'</span></li>';
+     }
+     $footer_text= variable_get('footer_contact_information');
+   $output='
+        <div class="container">
+            <div class="row">
+                <div class="col col-lg-4">';
+                
+                
+                
+                
+                $output.='
+                    <h2>'.t('News').'</h2>
+
+                    <ul>
+                        '.$list.'
+                    </ul>
+                </div>
+
+                <div class="col col-lg-4">
+                    <h2>'.t('Last opinions').'</h2>
+
+                    <ul>
+                     '.$list_seisukohad.'
+                    </ul>
+                </div>
+            ';
+            if(!empty($footer_text)):
+                $output.='<div class="col-lg-4">
+                            <h2>'.t('Contact').'</h2>
+
+                                 '.$footer_text['value'].'
+
+                            <p><img src="/sites/all/themes/Oiguskantsler/static/images/vapp-footer.png"></p><span class="copyright">Õiguskantsler.ee '.date('Y').'</span>
+                </div>';
+            endif;
+            $output.='    
+            </div>
+        </div>
+    ';
+    return $output;
+}

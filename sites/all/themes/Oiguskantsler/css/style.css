@@ -1,0 +1,187 @@
+/**
+ * Place your custom styles here.
+ */
+a.to_big {
+    
+    font-size: 30px;
+    
+}
+a.to_normal{
+    font-size:20px;
+}
+a.to_small{
+    font-size:10px;
+}
+a#text_resize_increase {
+    background:none;
+    margin:0px;
+}
+a#text_resize_reset {
+     background:none;
+     margin:0px;
+}
+a#text_resize_decrease {
+     background:none;
+     margin:0px;
+}
+.navbar-collapse {
+    padding-right: 0px; 
+    padding-left: 0px; }
+    
+article div.news_content{
+    height:auto;
+    max-height: 115px;
+    overflow: hidden;
+    
+}
+article div.news_content_seisukoht{
+    height:auto;
+    max-height: 115px;
+    overflow: hidden;
+    
+}
+.title_height{
+    height:90px;
+    max-height: 90px;
+    
+}
+.suuruse_maaramine{
+    
+    height:475px;
+    
+}
+.language-switcher-locale-url{
+    float:right;
+    list-style:none;
+    
+}
+.language-switcher-locale-url li{
+    float:right;
+    display:inline;
+    list-style:none;
+    
+}
+.language-switcher-locale-url li.first:before{
+    border-left-style:solid;
+    border-left-width:2px;
+    
+}
+.form-control{
+    
+    width:75%;
+}
+.form-textarea-wrapper textarea {
+    
+    width:75%;
+}
+
+.resizable-textarea .grippie {
+    
+    width:75%;
+    
+}
+body.page-node- header {
+    height: 35vh;
+    background: url(../static/images/maja-wide.jpg) no-repeat center top;
+    background-size: cover;
+}
+.image_hight{
+    height:189px;
+}
+.height_gallery{
+    
+    height:300px;
+    
+}
+.gallery_title{
+    height:100px;
+    vertical-align: bottom;
+     display: table-cell;
+     padding-bottom:  5px;
+}
+.gallery_title p{
+    bottom:0px;
+   
+}
+.gallery_thumbnail{
+        width: 100%;
+    margin-bottom: 10px;
+}
+.custom_footer{
+    
+    background-color: transparent;
+    
+    
+}
+.custom_footer a{
+    
+    color:#3d7cb6;}
+
+.normal_link{
+    font-size:17px;
+    color: white;
+    font-style: normal;
+    
+}
+.not-front header {
+    height: 35vh;
+    background: url(../static/images/maja-wide.jpg) no-repeat center top;
+    background-size: cover;
+}
+.form_date_select{
+    
+    width:100%;
+    
+}
+.not_so_big{
+    min-height: inherit;
+    height:auto !important;
+    background:none !important;
+}
+.fullwith{
+    
+    width:100%;
+}
+.form_date_select_date{
+    
+}
+.col-lg-6 .form-type-date-popup{
+    
+    width:100%!important;
+    
+}
+.col-lg-6 .form-type-date-popup .form-item-start-date{
+    
+    width:50%;
+    
+}
+.col-lg-6 .form-type-date-popup .form-item-end-date{
+    
+    width:50%;
+    
+}
+.form-type-date-popup .form-item-alates-date{
+    width:50%;
+}
+.form-type-date-popup .form-item-kuni-date{
+    width:50%;
+}
+.footer .col-lg-4 a{
+    
+    color:white;
+    
+}
+.webform_custom .form-control{
+    width: 100%;
+}
+.main-container a{
+    text-decoration: underline;
+}
+header .navbar-collapse{
+    
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}
+header .navbar-collapse #edit-submit{
+    margin-left: 15px;
+}

@@ -1,0 +1,224 @@
+<?php
+
+function oiguskantsler_front_page_content_menu() {
+  $items['node/get/ajax/%'] = array(
+    'page callback' => 'oiguskantsler_front_page_content_load_more', // Render HTML
+    'type' => MENU_CALLBACK,
+    'access arguments' => array('access content'),
+    'delivery callback' => 'oiguskantsler_front_page_content_load_more_ajax_callback',  // Magic goes here
+  );
+  return $items;
+}
+/**
+ * hook_block_info()
+ * 
+ */
+ 
+function oiguskantsler_front_page_content_block_info() {
+    
+    $blocks['oiguskantsler_uudised'] = array(
+    'info' => t('Õiguskantsler uudised block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+    $blocks['oiguskantsler_seisukohad'] = array(
+    'info' => t('Õiguskantsler seisukohad block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_front_page_content_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_uudised':
+            $block['subject'] = t('Uudised ');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('News'),
+                '#markup' => '<div class="col-lg-6"><h1>'.t('News').'</h1>'.oiguskantsler_uudised().'</div>',
+            );
+            
+            
+            
+            break;
+        case 'oiguskantsler_seisukohad':
+            $block['subject'] = t('Seisukohad ');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Seisukohad'),
+                '#markup' => '<div class="col-lg-6"><h1>'.t('Opinions').'</h1>'.oiguskantsler_seisukohad().'</div>',
+            );
+            
+            
+            
+            break;
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_uudised(){
+    global $language;
+    
+    $query = db_select('node','n')
+     ->condition('n.type','uudis')
+     ->condition('n.language',$language->language)
+     ->orderBy('created', 'DESC')//ORDER BY created
+     ->fields('n')
+     ->range(0,5);
+     
+    
+ $result = $query->execute();
+ $output='';
+ $number_of_news=5;
+ $type=2;
+ while($record = $result->fetchAssoc()) {
+     
+   $node=node_load($record['nid']);     
+   
+   $date=date("d.M.Y", $node->created);
+   $number_of_news=5;
+   
+   
+   $output.='  
+                    <article>
+                        
+                        <h2>'.$node->title.'</h2><span class="date">'.$date.'
+                        
+                        </span>
+                        
+                        <div class="news_content">
+                        <p class="front_content">'.$node->body[$language->language][0]['value'].'</p>
+                        </div>'.'<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>
+                        
+                    </article>
+                    ';
+ }
+   
+    $output.='<div id="ajax-target-extra"></div>';
+                
+    $output.='    <button id="load_more_u" loaded_value="5"  onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load More').'</button> <a href="/'.$language->language.'/uudised" class="btn btn-link">'.t('News archive').'</a>';
+    return $output;
+    
+}
+function oiguskantsler_seisukohad(){
+     global $language;
+    $query = db_select('node','n')
+     ->condition('n.type','seisukoht')
+     ->condition('n.language',$language->language)
+     ->orderBy('created', 'DESC')//ORDER BY created
+     ->fields('n')
+     ->range(0,5);
+     
+    
+ $result = $query->execute();
+ $output='';
+ $number_of_news=5;
+ $type=1;
+ 
+ while($record = $result->fetchAssoc()) {
+     
+   $node=node_load($record['nid']);     
+   
+   $date=date("d.M.Y", $node->created);
+   
+   
+   $output.='  
+                    <article>
+                        
+                        <h2>'.$node->title.'</h2><span class="date">'.$date.'</span>
+                        
+                        <div class="news_content">
+                        ';
+                        if(!empty($node->body)):
+                        $output.='<p class="front_content_seisukoht">'.$node->body[$language->language][0]['value'].'</p>';    
+                        endif;    
+                        $output.='
+                          </div>'.'<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>
+                        
+                    </article>
+                    
+                    ';
+ }
+   $output.='<div id="ajax-target"></div>';
+    
+                
+    $output.='     <button id="load_more_s" loaded_value="5" onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load more').'</button> <a href="'.$language->language.'/seisukohad" class="btn btn-link">'.t('Opinions archive').'</a>';
+return $output;
+}
+
+function oiguskantsler_front_page_content_load_more() {
+  // The function will receive the array of arguments after the "get/ajax" prefix
+  $number_of_news = implode('/', func_get_args());
+  $filters =  explode('/', $number_of_news);
+  
+  
+  $existing_number = $filters[0];
+  
+  $type=$filters[1];
+  $language=$filters[2];
+  
+  if($type==1):
+    $tyyp='seisukoht';
+  
+  elseif($type==2):
+      $tyyp='uudis';
+  endif;      
+  
+   $nodes_to_send=array(); 
+ $query = db_select('node','n')
+     ->condition('n.type',$tyyp)
+     ->condition('n.language',$language)
+     ->orderBy('created', 'DESC')//ORDER BY created
+     ->fields('n')
+     ->range($existing_number,5);
+     
+    
+ $result = $query->execute();
+       $output='';
+  while($record = $result->fetchAssoc()) {
+      $node= node_load($record['nid']);
+      $date=date('d.M.Y',$node->created);
+      $output.='  
+                    <article>
+                        
+                        <h2>'.$node->title.'</h2><span class="date">'.$date.'</span>
+                        
+                        <div class="news_content">
+                        ';
+                        
+                        if(!empty($node->body)):
+                        $output.='<p class="front_content_seisukoht">'.$node->body[$language][0]['value'].'</p>';    
+                        endif;    
+                        $output.='
+                        </div>'.'<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>
+                        
+                    </article>
+                    
+                    ';
+      
+  }
+  
+  
+  
+  return $output;
+}
+
+function oiguskantsler_front_page_content_load_more_ajax_callback($page_callback_result) {
+  print($page_callback_result);
+  //exit();
+  // Only render content and validates return
+  //$content = is_string($page_callback_result) ? $page_callback_result : drupal_render($page_callback_result);
+  //$html = '' . drupal_get_css() . drupal_get_js() . '' . $content . '';
+  //print $html;
+  //drupal_page_footer();
+
+}

@@ -1,0 +1,6 @@
+name = Asutus
+package = Õiguskantsler
+core = 7.x
+
+dependencies[] = field
+dependencies[] = i18n_taxonomy

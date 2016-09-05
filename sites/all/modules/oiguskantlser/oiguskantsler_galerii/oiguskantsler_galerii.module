@@ -1,0 +1,100 @@
+<?php
+
+ 
+function oiguskantsler_galerii_block_info() {
+    
+    $blocks['oiguskantsler_galleries'] = array(
+    'info' => t('Õiguskantsleri galeriide blokk'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_galerii_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_galleries':
+            $block['subject'] = t('Õiguskantsleri galeriide blokk ');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Galerii'),
+                '#markup' => oiguskantsler_galerii(),
+            );
+            
+            
+            
+            break;
+       
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_galerii(){
+    global $language;
+    $keel=$language->language;
+    $tyyp='galerii';
+    
+    $query = db_select('node','n')
+    
+     ->condition('n.type',$tyyp)
+     ->condition('n.language',$keel)
+     ->orderBy('created', 'DESC')//ORDER BY created
+     ->fields('n');
+     
+    
+    $result = $query->execute();
+       $output='<div class="row">';
+    $image_style='galerii_thumbnail';
+  while($record = $result->fetchAssoc()) {
+      
+      $loaded_galerii = node_load($record['nid']);
+      
+      $output.='<div class="col-lg-3 height_gallery"><a href="'.url('node/'.$loaded_galerii->nid).'" class="gallery-image" data-lightbox="gallery_1"><div class="gallery_title"><p>'.$loaded_galerii->title.'</p></div>';
+      if(isset($loaded_galerii->field_image_with_author['und'])):
+          
+          $gallerii_count = count($loaded_galerii->field_image_with_author['und']);
+          
+          if($gallerii_count!=1){
+           $random_picture_picker = rand(0,$gallerii_count);
+          }
+          else {
+              $random_picture_picker=0;
+          }
+         
+          $loaded_image=(entity_load('field_collection_item', array($loaded_galerii->field_image_with_author['und'][0]['value'])));
+          
+          $image_url = image_style_url($image_style,$loaded_image[1]->field_galerii_pilt['und'][0]['uri']);
+           
+      elseif(isset($loaded_galerii->field_images['und'])):
+          
+          $gallerii_count = count($loaded_galerii->field_images['und']);
+           if($gallerii_count!=1){
+           $random_picture_picker = rand(0,$gallerii_count);
+          }
+          else {
+              $random_picture_picker=0;
+          }
+          $image_url = image_style_url($image_style,$loaded_galerii->field_images['und'][0]['uri']);
+          
+          
+      endif;  
+      
+      $output.='
+								<img src="'.$image_url.'" class="img-responsive image_hight">
+							</a></div>';
+      
+  }
+    $output.='</div>';
+    return $output;
+    
+}

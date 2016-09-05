@@ -1,0 +1,83 @@
+<?php
+
+ 
+function oiguskantsler_kkk_block_info() {
+    
+    $blocks['oiguskantsler_kkk'] = array(
+    'info' => t('Õiguskantsler kkk block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_kkk_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_kkk':
+            $block['subject'] = t('');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t(''),
+                '#markup' => oiguskantsler_kkk(),
+            );
+            
+            
+            
+            break;
+       
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_kkk(){
+    global $language;
+    
+    $query = db_select('node','n')
+     ->condition('n.type','kkk')
+     ->condition('n.language',$language->language)
+     
+     ->fields('n');
+     
+     $result = $query->execute();
+     $output='  <article>
+                        
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">';
+                        $i=0;
+     while($record = $result->fetchAssoc()) {
+         $full_kkk=node_load($record['nid']);
+         
+         $output.='
+         
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title"><a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse_'.$i.'" aria-expanded="false" aria-controls="collapseTwo">'.$record['title'].'</a></h4>
+                                </div>
+
+                                <div id="collapse_'.$i.'" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                     '.  $full_kkk->body[$language->language][0]['safe_value'].'
+                                    </div>
+                                </div>
+                            </div>';
+                            $i++;
+     }
+   
+
+                        
+
+                            
+                    
+                    $output.='</article></div>';
+                    
+                    return $output;
+}

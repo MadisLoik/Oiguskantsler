@@ -1,0 +1,55 @@
+name = Õiguskantsleri uus kujundus(CDN)
+description = Uses bootstrap as basis for theme.
+core = 7.x
+base theme = bootstrap
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Regions
+;;;;;;;;;;;;;;;;;;;;;
+
+regions[top_area]       = 'Top Area Bar'
+regions[top_text]       = 'Top text'
+regions[navigation]     = 'Navigation'
+regions[main]           = 'Main content'
+regions[header]         = 'Top Bar'
+regions[highlighted]    = 'Highlighted'
+regions[help]           = 'Help'
+regions[content]        = 'Content'
+regions[sidebar_first]  = 'Primary'
+regions[sidebar_second] = 'Secondary'
+regions[footer]         = 'Footer'
+regions[page_top]       = 'Page top'
+regions[page_bottom]    = 'Page bottom'
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Stylesheets
+;;;;;;;;;;;;;;;;;;;;;
+
+stylesheets[all][] = css/style.css
+stylesheets[all][] = static/css/styles.css
+stylesheets[all][] = static/css/responsive.css
+stylesheets[all][] = static/css/lightbox.css
+stylesheets[all][] = static/css/fonts.css
+stylesheets[all][] = static/css/font-awesome.min.css
+stylesheets[all][] = static/css/animate.css
+stylesheets[all][] = static/css/daterangerpicker.css
+
+
+
+
+
+;;;;;;;;;;;;;;;;;;;;;
+;; Scripts
+;;;;;;;;;;;;;;;;;;;;;
+scripts[] = static/js/moment.min.js
+scripts[] = js/featherlight.js
+scripts[] = static/js/scripts.js
+scripts[] = js/featherlight.gallery.js
+scripts[] = static/js/daterangepicker.js
+scripts[] = static/js/parallax.min.js
+scripts[] = static/js/lightbox.min.js
+
+
+scripts[] = js/custom.js

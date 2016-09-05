@@ -1,0 +1,304 @@
+<?php
+function oiguskantsler_otsing_menu(){
+$items['otsing'] = array(
+    'title' => 'Search results',
+    'page callback' => 'oiguskantsler_search',
+    'access arguments' => array('access content'),
+    'type' => MENU_CALLBACK,
+  );
+  return $items;
+} 
+function oiguskantsler_otsing_block_info() {
+    
+    $blocks['oiguskantsler_otsing'] = array(
+    'info' => t('Õiguskantsler Otsing block'),
+    // DRUPAL_CACHE_PER_ROLE will be assumed.
+  );
+  
+  return $blocks;
+    
+}
+/**
+ * 
+ * hook_block_view()
+ * 
+ */ 
+
+
+function oiguskantsler_otsing_block_view($delta = '') {
+    $block = array();
+    switch ($delta) {
+        case 'oiguskantsler_otsing':
+            $form_get = drupal_get_form('oiguskantsler_otsing');
+            $block['subject'] = t('Otsing ');
+            $block['content'] = array(
+                '#type' => 'item',
+                '#title' => t('Otsing'),
+                '#markup' => drupal_render($form_get),
+            );
+            
+            
+            
+            break;
+       
+    }
+    
+    
+    
+    return $block;
+}
+function oiguskantsler_otsing($form,&$form_state){
+    
+    $form=array(
+        
+        
+        '#type' => 'form',
+        '#prefix' => '<div class="sidepanel">
+                        <h2 class="title">'.t('Search').'</h2>
+                        <div class="panel panel-default">
+                            <div class="panel-body">'  ,
+        '#suffix' => '</div></div></div>',);
+        
+    $form['kirje']=array(
+        '#theme_wrappers' => array(),
+        '#prefix' => '<div class="form-group">
+                                        <label for="tagword">'.t('Keyword').'</label> ',
+        '#type' => 'textfield',
+        '#suffix' => '</div>',
+        '#id' => 'tagword',
+        '#attributes' => array(
+           'placeholder' => t('keyword'),
+           'class' => array( 
+               0 => 'form-control',
+               1=>'form_date_select',
+               
+               ),
+            
+            ),
+        
+        );
+    $form['dates']=array(
+        '#theme_wrappers' => array(),
+        '#prefix' => '<div class="row">',
+        
+        '#suffix' => '</div>',
+        
+        );    
+    $form['dates']['start']=array(
+        '#theme_wrappers' => array(),
+        
+        '#prefix' => '<div class="form-group col-lg-6">',
+        
+        '#suffix' => '</div>',
+        
+        '#type' => 'date_popup',
+        
+        '#date_format' => 'd-m-Y',
+        
+        '#date_year_range'=> '1990:0',
+        
+        '#description' => '',
+        
+        '#attributes' => array(
+            
+            'autocomplete' => 'off',
+            
+            'class' => array(
+                
+                0=>'form-control',
+                
+                1=>'form_date_select',
+                
+                2=>'form_date_select_date'
+                
+                ),
+            
+            'placeholder' => t('From'),
+            
+            ),
+        
+        );
+        $form['dates']['end']=array(
+        
+        '#prefix' => '<div class="form-group col-lg-6">',
+        
+        '#suffix' => '</div>',
+        
+        '#type' => 'date_popup',
+        
+        '#timepicker' => 'timepicker',
+        
+        '#date_format' => 'd-m-Y',
+        
+        '#date_year_range'=> '1990:0',
+        
+        '#id' => '',
+        
+        '#attributes' => array(
+            
+            
+            'autocomplete' => 'off',
+            
+            
+            'class' => array(
+                
+                0=>'form-control',
+                
+                1=>'form_date_select',
+                
+                2=>'form_date_select_date'
+                ),
+            
+            'placeholder' => t('Until'),
+            
+            ),
+        
+        );
+    $form['submit']=array(
+        
+        
+        
+        '#type' => 'submit',
+        
+        '#value' => t('Search'),
+        
+        '#name' => t('Search'),
+        
+        );    
+    $form['#submit'][]='oiguskantsler_search_submitt';
+    
+    return($form);
+}
+
+function oiguskantsler_search_submitt($form,&$form_state){
+     
+      
+     // drupal_goto("search/site/".$form_state['values']['kirje'].'&');
+      drupal_goto('otsing/',array('query' => oigus_otsing_build_query(array_map('trim', $form_state['values']))));
+
+      
+    
+    
+}
+function oigus_otsing_build_query($params){
+    
+    
+    unset($params['submit']);
+    unset($params['form_build_id']);
+    unset($params['form_token']);
+    unset($params['form_id']);
+    unset($params['Otsi']);
+
+    return $params;
+
+    
+}
+function oiguskantsler_search(){
+    global $language;
+    
+    drupal_set_title(t('Search', array(), array('context' => 'page title')));
+    
+  $query_parameters=drupal_get_query_parameters();
+    if(isset($query_parameters['kirje'])){
+        
+        $marksona=$query_parameters['kirje'];
+        
+    }
+    else {
+        $marksona='';
+    }
+    if(isset($query_parameters['start'])){
+        
+        $start=$query_parameters['start'];
+        
+    }
+    if(isset($query_parameters['end'])){
+        
+        $end=$query_parameters['end'];
+        
+    }
+    
+       
+    
+    $output=theme('pager');
+    
+      if(isset($start)):
+  $datetime = new DateTime($start);
+  $datetime=$datetime->format('Y-m-d');
+  $datetime_minutid = new DateTime($start);
+  $datetime_minutid = $datetime_minutid->format('h:m:s');
+  $whole_datetime=$datetime.'T'.$datetime_minutid.'Z';
+  else:
+    
+  $whole_datetime='1970-12-31T23:59:59Z';
+    
+  endif; 
+  if(isset($end)):
+  $datetime_kuni = new DateTime($end);
+  $datetime_kuni = $datetime_kuni->format('Y-m-d');
+  $datetime_minutid_kuni = new DateTime($end);
+  $datetime_minutid_kuni = $datetime_minutid_kuni->format('h:m:s');
+  $whole_datetime_kuni=$datetime_kuni.'T'.$datetime_minutid_kuni.'Z';
+  else:
+  
+  $whole_datetime_kuni='NOW';
+    
+  endif; 
+  
+  $exploded=(explode('=',arg(1)));
+  
+  
+  if(isset($query_parameters)):
+  
+  $query = apachesolr_drupal_query("custom", array('q' => $marksona ), 'sort_label asc', 'search/path');
+    $query->addParam('hl.q','on');
+    $query->addParam('rows',300);
+    
+    $resp = $query->search();
+
+     if(!empty($start)or !empty($end)):
+    
+  $query->addParam('fq','ds_created:['.$whole_datetime.' TO '.$whole_datetime_kuni.']');
+  endif;
+  $resp = $query->search();
+  
+  endif;
+  $output.='<ol class="search-results">';
+  $highlighted_elements=array();
+  
+  if(!empty($resp->highlighting)):
+      $i=0;
+  foreach ($resp->highlighting as $highlight) {
+      $highlighted_elements[$i]=$highlight->content[0];
+      $i++;
+  }
+  endif;
+  if(!empty($resp)):
+      if($resp->response->numFound>0):
+          $i=0;
+          foreach ($resp->response->docs as $tulemus) {
+              if($tulemus->ss_language==$language->language){
+              $content=$tulemus->content;
+              $node=node_load($tulemus->entity_id);
+              $body=$node->body[$language->language][0]['value'];
+              if($tulemus->label!='Töötajad'){
+              $output.=' <li>
+                            <h3><a href="'.$tulemus->url.'">'.$tulemus->label.'</a></h3>
+
+                           '.substr($body, 0, 400).'
+                        </li>';
+              $i++;
+              }
+              }
+          }
+          
+      endif;      
+  endif;  
+  $output.='
+                       
+
+                        
+';
+    return $output;
+    
+}

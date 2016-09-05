@@ -1,0 +1,13 @@
+diff --git a/menu_fields.module b/menu_fields.module
+index a4e8f80..17e7f71 100644
+--- a/menu_fields.module
++++ b/menu_fields.module
+@@ -742,7 +742,7 @@ function menu_fields_entity_info() {
+ function menu_fields_admin_access($menu) {
+   $menu = str_replace('_', '-', $menu);
+   $enabled_menus = menu_fields_enabled_menus();
+-  if (!in_array($menu, $enabled_menus)) {
++  if (!is_numeric($menu) && !in_array($menu, $enabled_menus)) {
+     return FALSE;
+   }
+   return user_access('administer menu fields');

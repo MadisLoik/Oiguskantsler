@@ -1,0 +1,22 @@
+<?php
+/**
+ * Implements hook_field_schema().
+ */
+function oigus_asutus_field_schema($field) {
+  switch($field['type']) {
+    case 'oigus_asutus_asutus':
+      $columns = array(
+        'tid' => array(
+          'type' => 'int',
+          'unsigned' => TRUE,
+          'not null' => TRUE,
+        ),
+      );
+      
+      break;
+  }
+  
+  return array(
+    'columns' => $columns,
+  );
+}

@@ -1,0 +1,5 @@
+name = Veebivorm
+package = Õiguskantsler
+core = 7.x
+
+dependencies[] = webform

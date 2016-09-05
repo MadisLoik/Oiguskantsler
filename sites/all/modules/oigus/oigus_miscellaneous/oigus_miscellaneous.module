@@ -1,0 +1,657 @@
+<?php
+
+error_reporting(E_ALL ^ E_NOTICE);
+
+/**
+ * Implement hook_init().
+ */
+function oigus_miscellaneous_init() {
+  global $_domain;
+  global $language;
+  
+  // Search slash fix/hack
+  $q = $_GET['q'];
+  if(strpos($q, 'search/apachesolr_search/') !== FALSE){
+    $q2 = str_replace('search/apachesolr_search/', '', $q);
+    $q2 = str_replace('/', '_', $q2);
+    $_GET['q'] = 'search/apachesolr_search/'.$q2;
+  }
+
+  drupal_add_js(array(
+    'oigus_miscellaneous' => array(
+      'lang' => array(
+        'first' => t('« first'),
+        'previous' => t('‹ previous'),
+        'next' => t('next ›'),
+        'last' => t('last »'),
+        'showing' => t('Showing'),
+        'total' => t('Total'),
+        'show_all' => t('Show all'),
+        'use_pager' => t('Use pager'),
+        'no_records_found' => t('No matching records found'),
+      ),
+    ),
+  ), 'setting');
+
+  if ($_domain['domain_id'] == 2 && $language->language == 'en' && arg(0) == 'node' && !arg(1)) {
+    drupal_goto('node/225');
+  }
+
+  if (arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)) {
+    $node = node_load(arg(1));
+
+    if ($node->type == 'page') {
+      $trail = menu_get_active_trail();
+
+      if ($trail[1]['mlid'] == 1287 || $trail[1]['mlid'] == 2074) {
+        $_SESSION['lo_mode'] = 'noor';
+      }
+      else if ($trail[1]['mlid'] == 1288 || $trail[1]['mlid'] == 2075) {
+        $_SESSION['lo_mode'] = 'taiskasvanu';
+      }
+      else if ($trail[1]['mlid'] == 2024 || $trail[1]['mlid'] == 2073 || $trail[1]['mlid'] == 2070) {
+        $_SESSION['lo_mode'] = 'laps';
+      }
+    }
+  }
+  else {
+    if (arg(0) == 'noor' || arg(0) == 'molodoy') {
+      $_SESSION['lo_mode'] = 'noor';
+    }
+    else if (arg(0) == 'taiskasvanu' || arg(0) == 'bzroslyy' || arg(0) == 'bpozlyy') {
+      $_SESSION['lo_mode'] = 'taiskasvanu';
+    }
+    else if (arg(0) == 'laps' || arg(0) == 'pebenok' || arg(0) == 'child') {
+      $_SESSION['lo_mode'] = 'laps';
+    }
+  }
+
+  $mode = $_SESSION['lo_mode'];
+
+  // Let's set active trails
+  if(arg(0) == 'node' && is_numeric(arg(1)) && !arg(2)){
+    $node = node_load(arg(1));
+    /*  Õiguskantsler */
+    if($_domain['domain_id'] == 0){
+      if($node->type == 'uudis'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-main-menu-est', 'oiguskantsler/suhted-avalikkusega/uudised');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-main-menu-rus', 'kancler-yusticii/novosti');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-main-menu-eng', 'chancellor-of-justice/public-relations/news');
+        }
+      }
+      if($node->type == 'pressiteated'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-main-menu-est', 'oiguskantsler/suhted-avalikkusega/pressiteated');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-main-menu-rus', 'kancler-yusticii/press-relizy');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-main-menu-eng', 'chancellor-of-justice/public-relations/press-releases');
+        }
+      }
+      if($node->type == 'article' || $node->type == 'intervjuu'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-main-menu-est', 'oiguskantsler/suhted-avalikkusega/artiklid-ja-intervjuud');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-main-menu-rus', 'kancler-yusticii/artikli-i-intervyu');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-main-menu-eng', 'chancellor-of-justice/public-relations/articles-and-interviews');
+        }
+      }
+      if($node->type == 'k_ne'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-main-menu-est', 'oiguskantsler/suhted-avalikkusega/koned');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-main-menu-rus', 'kancler-yusticii/rechi');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-main-menu-eng', 'chancellor-of-justice/public-relations/speeches');
+        }
+      }
+      if($node->type == 'seisukoht'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-main-menu-est', 'seisukohad/viimased-seisukohad');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-main-menu-rus', 'mneniya/poslednie-mneniya');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-main-menu-eng', 'opinions/latest-opinions');
+        }
+      }
+    }
+
+    /* Lasteombudsman */
+    if($_domain['domain_id'] == 2){
+      if($node->type == 'uudis'){
+        $a = $node->field_target['und'];
+        if($language->language == 'et'){
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/uudised');
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/uudised');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/uudised');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/uudised');
+          }
+        }
+        else if($language->language == 'ru'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/rechi');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/rechi');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/rechi');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/rechi');
+          }
+        }
+        else if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'whats-new/news');
+        }
+      }
+      else if($node->type == 'article' || $node->type == 'intervjuu'){
+        $a = $node->field_target['und'];
+        if($language->language == 'et'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/artiklid-ja-intervjuud');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/artiklid-ja-intervjuud');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/artiklid-ja-intervjuud');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/artiklid-ja-intervjuud');
+          }
+        }
+        else if($language->language == 'ru'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/artikli-i-intervyu');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/artikli-i-intervyu');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/artikli-i-intervyu');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/artikli-i-intervyu');
+          }
+        }
+        else if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'whats-new/articles-and-interviews');
+        }
+      }
+      else if($node->type == 'k_ne'){
+        $a = $node->field_target['und'];
+        if($language->language == 'et'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/koned');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/koned');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/koned');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/koned');
+          }
+        }
+        else if($language->language == 'ru'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/rechi');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/rechi');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/rechi');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/rechi');
+          }
+        }
+        else if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'whats-new/speeches');
+        }
+      }
+      else if($node->type == 'teavituskampaania'){
+        $a = $node->field_target['und'];
+        if($language->language == 'et'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/teavituskampaaniad');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/teavituskampaaniad');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/aktuaalne/teavituskampaaniad');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'noor/aktuaalne/teavituskampaaniad');
+          }
+        }
+        else if($language->language == 'ru'){
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/prosvetitelskie-kampanii');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/prosvetitelskie-kampanii');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/aktualno/prosvetitelskie-kampanii');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/aktualno/prosvetitelskie-kampanii');
+          }
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'whats-new/campaigns');
+        }
+      }
+      else if($node->type == 'video'){
+        $a = $node->field_target['und'];
+        if($language->language == 'et'){
+          if($a[0]['tid'] == '21') menu_tree_set_path('menu-lo-main-menu-est', 'laps/videod');
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-est', 'noor/videod');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/videod');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/videod');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'noor/videod');
+          }
+          else if ($mode == 'laps') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'laps/videod');
+          }
+        }
+        else if($language->language == 'ru'){
+          if($a[0]['tid'] == '21') menu_tree_set_path('menu-lo-main-menu-rus', 'pebenok/multfilmy-igry-video');
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/multfilmy-igry-video');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/multfilmy-igry-video');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/multfilmy-igry-video');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/multfilmy-igry-video');
+          }
+          else if ($mode == 'laps') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'pebenok/multfilmy-igry-video');
+          }
+        }
+      }
+      else if($node->type == 'galerii'){
+        $a = $node->field_target['und'];
+        if($language->language == 'et'){
+          if($a[0]['tid'] == '21') menu_tree_set_path('menu-lo-main-menu-est', 'laps/pildialbum');
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-est', 'noor/pildialbum');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/pildialbum');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanu/pildialbum');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'noor/pildialbum');
+          }
+          else if ($mode == 'laps') {
+            menu_tree_set_path('menu-lo-main-menu-est', 'laps/pildialbum');
+          }
+        }
+        else if($language->language == 'ru'){
+          if($a[0]['tid'] == '21') menu_tree_set_path('menu-lo-main-menu-rus', 'pebenok/fotoalbom');
+          if($a[0]['tid'] == '22') menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/fotoalbom');
+          if($a[0]['tid'] == '23') menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/fotoalbom');
+
+          if ($mode == 'taiskasvanu') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'bzroslyy/fotoalbom');
+          }
+          else if ($mode == 'noor') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'molodoy/fotoalbom');
+          }
+          else if ($mode == 'laps') {
+            menu_tree_set_path('menu-lo-main-menu-rus', 'pebenok/fotoalbom');
+          }
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'photo-gallery');
+        }
+      }
+      else if($node->type == 'seisukoht'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-lo-main-menu-est', 'taiskasvanud/seisukohad/viimased-seisukohad');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-lo-main-menu-rus', 'node/1530');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'node/335');
+        }
+      }
+      else if($node->type == 'kontrollkaigud'){
+        if($language->language == 'et'){
+          menu_tree_set_path('menu-lo-main-menu-est', 'kontrollkaigud');
+        }
+        if($language->language == 'ru'){
+          menu_tree_set_path('menu-lo-main-menu-rus', 'kontrolnye-vizity');
+        }
+        if($language->language == 'en'){
+          menu_tree_set_path('menu-lo-main-menu-eng', 'investigation-visits');
+        }
+      }
+    }
+  }
+
+  if(arg(0) == 'search') drupal_set_title(t('Search results'));
+
+  variable_set('image_title_length', 128);
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function oigus_miscellaneous_galerii_node_form_alter(&$form, $form_state) {
+  //die(print_r($form));
+}
+
+function oigus_miscellaneous_form_alter($form, &$form_state, $form_id) {
+  //print_r($form);
+
+  return $form;
+}
+
+/**
+ * Implementation of hook_form_FORM_ID_alter().
+ */
+function oigus_miscellaneous_form_system_site_information_settings_alter(&$form, $form_state) {
+  $form['site_slogan']['#maxlength'] = 256; // Or whatever number you would like to set it to.
+}
+
+/**
+ * Implement hook_menu().
+ */
+function oigus_miscellaneous_menu() {
+  $items = array();
+
+  $items['node'] = array(
+    'title' => '',
+    'page callback' => 'oigus_miscellaneous_empty_page',
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+
+  $items['admin/migration'] = array(
+    'title' => 'Migratsioon',
+    'page callback' => 'oigus_miscellaneous_migration',
+    'access callback' => TRUE,
+    'type' => MENU_SUGGESTED_ITEM,
+  );
+
+  $items['package-version'] = array(
+    'title' => 'Package version',
+    'page callback' => 'oigus_miscellaneous_package_version',
+    'access callback' => TRUE,
+    'type' => MENU_CALLBACK,
+  );
+
+  return $items;
+}
+
+function oigus_miscellaneous_package_version() {
+  print date('Y-m-d H:i:s' , filemtime(__FILE__));
+
+  return;
+}
+
+function oigus_miscellaneous_empty_page() {
+  return '';
+}
+
+/**
+* Implements hook_node_view().
+*/
+function oigus_miscellaneous_node_view($node, $view_mode) {
+  $node->rss_elements[1] = array(
+    'key' => 'dc:creator',
+    'value' => t('Õiguskantsleri kantselei')
+  );
+}
+
+function wash($x) {
+  $x = html_entity_decode($x, ENT_COMPAT, 'UTF-8');
+  $x = str_replace('\"', '"', $x);
+  $x = str_replace("\'", "'", $x);
+  $x = trim($x);
+  return $x;
+}
+
+function oigus_miscellaneous_migration() {
+
+drupal_add_http_header('Content-Type', 'text/html; charset=utf-8');
+
+print '<pre>'."\n";
+
+/*
+  // Pressiteated
+  $query = db_select('oigus_news', 'x')
+    ->fields('x')
+    ->orderBy('id', 'ASC')
+    //->range(0, 1)
+    ->execute();
+
+	foreach($query as $row){
+    $title = wash($row->title);
+    $body  = wash($row->newstext);
+    $created = wash($row->date);
+    $language = 'et';
+    if($row->lang == 'eng') $language = 'en';
+    if($row->lang == 'rus') $language = 'ru';
+
+    $node = new stdClass();
+    $node->type = 'pressiteated';
+    node_object_prepare($node);
+
+    $node->title    = $title;
+    $node->language = $language;
+    $node->created = strtotime($created);
+
+    $node->body[$node->language][0]['value']   = $body;
+    $node->body[$node->language][0]['summary'] = text_summary($body);
+    $node->body[$node->language][0]['format']  = 'full_html';
+
+    $node->domains = array('-1' => '-1');
+    $node->domain_site = '';
+    $node->subdomains = array('Õiguskantsler');
+
+    node_save($node);
+
+    print $title.' ('.$language.")\n";
+	}
+*/
+
+/*
+  // Artiklid ja kõned (aka meedia)
+  $query = db_select('oigus_meedia', 'x')
+    ->fields('x')
+    ->orderBy('id', 'ASC')
+    //->range(0, 1)
+    ->execute();
+
+	foreach($query as $row){
+    $title = wash($row->title);
+    $body  = wash($row->newstext);
+    $created = wash($row->date);
+    $language = 'et';
+    if($row->lang == 'eng') $language = 'en';
+    if($row->lang == 'rus') $language = 'ru';
+
+    $node = new stdClass();
+    $node->type = 'article';
+    node_object_prepare($node);
+
+    $node->title    = $title;
+    $node->language = $language;
+    $node->created = strtotime($created);
+
+    $node->body[$node->language][0]['value']   = $body;
+    $node->body[$node->language][0]['summary'] = text_summary($body);
+    $node->body[$node->language][0]['format']  = 'full_html';
+
+    $node->domains = array('-1' => '-1');
+    $node->domain_site = '';
+    $node->subdomains = array('Õiguskantsler');
+
+    node_save($node);
+
+    print $title.' ('.$language.")\n";
+	}
+*/
+
+/*
+  // Kõned
+  $query = db_select('oigus_koned', 'x')
+    ->fields('x')
+    ->orderBy('id', 'ASC')
+    //->range(0, 1)
+    ->execute();
+
+	foreach($query as $row){
+    $title = wash($row->title);
+    $body  = wash($row->newstext);
+    $created = wash($row->date);
+    $language = 'et';
+    if($row->lang == 'eng') $language = 'en';
+
+    $node = new stdClass();
+    $node->type = 'k_ne';
+    node_object_prepare($node);
+
+    $node->title    = $title;
+    $node->language = $language;
+    $node->created = strtotime($created);
+
+    $node->body[$node->language][0]['value']   = $body;
+    $node->body[$node->language][0]['summary'] = text_summary($body);
+    $node->body[$node->language][0]['format']  = 'full_html';
+
+    $node->domains = array('-1' => '-1');
+    $node->domain_site = '';
+    $node->subdomains = array('Õiguskantsler');
+
+    node_save($node);
+
+    print $title.' ('.$language.")\n";
+	}
+*/
+
+/*
+  // Uudised (ET)
+  $query = db_select('oigus_weekly', 'x')
+    ->fields('x')
+    ->orderBy('id', 'ASC')
+    //->range(0, 1)
+    ->execute();
+
+	foreach($query as $row){
+    $title = wash($row->title);
+    $body  = wash($row->newstext);
+    $created = wash($row->date);
+
+    $node = new stdClass();
+    $node->type = 'uudis';
+    node_object_prepare($node);
+
+    $node->title    = $title;
+    $node->language = 'et';
+    $node->created = strtotime($created);
+
+    $node->body[$node->language][0]['value']   = $body;
+    $node->body[$node->language][0]['summary'] = text_summary($body);
+    $node->body[$node->language][0]['format']  = 'full_html';
+
+    $node->domains = array('-1' => '-1');
+    $node->domain_site = '';
+    $node->subdomains = array('Õiguskantsler');
+
+    node_save($node);
+
+    print $title."\n";
+	}
+*/
+
+die('</pre>');
+
+}
+
+/*
+ * Implements hook_cron().
+ */
+function oigus_miscellaneous_cron(){
+  $queue = DrupalQueue::get('delete_webform_submission_attachments');
+
+  $result = db_select('webform_submitted_data', 'wsd')
+    ->fields('wsd')
+    ->execute()
+    ->fetchAll();
+
+  if ($result) {
+    foreach ($result as $row) {
+      $node = node_load($row->nid);
+
+      if ($node) {
+        $component = $node->webform['components'][$row->cid];
+
+
+        switch ($component['type']) {
+          case 'oigus_veebivorm':
+          case 'file':
+            $queue->createItem($row);
+
+            break;
+        }
+      }
+    }
+  }
+}
+
+/*
+ * Implements hook_cron_queue_info().
+ */
+function oigus_miscellaneous_cron_queue_info(){
+  $queues = array();
+
+  $queues['delete_webform_submission_attachments'] = array(
+    'worker callback' => 'oigus_miscellaneous_delete_webform_submission_attachments',
+  );
+
+  return $queues;
+}
+
+function oigus_miscellaneous_delete_webform_submission_attachments($row) {
+  if (is_numeric($row->data)) {
+    $file = file_load($row->data);
+
+    if ($file) {
+      db_delete('webform_submitted_data')
+      ->condition('sid', $row->sid)
+      ->condition('cid', $row->cid)
+      ->execute();
+
+      file_delete($file);
+    }
+  }
+  else {
+    $fids = unserialize($row->data);
+
+    if ($fids) {
+      foreach ($fids as $fid) {
+        $file = file_load($fid);
+
+        if ($file) {
+          file_delete($file);
+        }
+      }
+    }
+  }
+
+  db_delete('webform_submitted_data')
+    ->condition('sid', $row->sid)
+    ->condition('cid', $row->cid)
+    ->execute();
+}
