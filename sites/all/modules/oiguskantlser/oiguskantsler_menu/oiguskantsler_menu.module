@@ -400,7 +400,7 @@ function Oiguskantlser_menu_viited(){
           
           if($value['link']['language']==$language->language){
               
-              $output.=' <li><a href="'.$value['link']['link_path'].'">'.$value['link']['link_title'].'</a></li>';
+              $output.=' <li><a href="'.url($value['link']['link_path']).'">'.$value['link']['link_title'].'</a></li>';
               
           }
           
@@ -410,7 +410,7 @@ function Oiguskantlser_menu_viited(){
       
       
      return $output; 
-     dpm($main_menu_tree);
+     
 }
 function Oiguskantlser_menu_koned(){
     
