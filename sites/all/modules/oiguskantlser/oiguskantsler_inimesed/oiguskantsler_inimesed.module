@@ -107,9 +107,21 @@ function oiguskantsler_inimesed(){
      $suur_persoon=array();
      
      while($record = $result->fetchAssoc()) {
-         
+         $tabelis=0;
+         $pilt=0;
          $full_tootaja = node_load($record['nid']); 
          
+         if(isset($full_tootaja->field_tabel_pilt['und'])){
+             foreach($full_tootaja->field_tabel_pilt['und'] as $kontroll){
+                 if($kontroll['value']==1){
+                     $tabelis=1;
+                 }
+                 if($kontroll['value']==2){
+                     $pilt=1;
+                 }
+             }
+         }
+         if($tabelis==1){
          if(!empty($full_tootaja->field_osakond['und'][0]['value'])){
           $osakond = $full_tootaja->field_osakond['und'][0]['value'];
           
@@ -742,13 +754,15 @@ function oiguskantsler_inimesed(){
          ';
               
          }
+         }
+         
          $jkr=$full_tootaja->field_j_rjekord['und'][0]['value'];
          
          
          
          
          $persoon_url=image_style_url($image_style, ($full_tootaja->field_persooni_pilt['und'][0]['uri']));
-         
+         if($pilt==1){
          $suur_persoon[$jkr].='<div class="col-lg-4">
                                 <div class="contact suuruse_maaramine">';
                                 
@@ -782,7 +796,7 @@ function oiguskantsler_inimesed(){
                                     </ul>
                                 </div>
                             </div>';
-           
+         }
      }
      ksort($suur_persoon);
     
