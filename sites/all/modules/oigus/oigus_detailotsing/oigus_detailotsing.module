@@ -200,14 +200,15 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
   
     //$parameters['alates']=str_replace('-','.',$parameters['alates']);
     //$parameters['kuni']=str_replace('-','.',$parameters['kuni']);
-        
+    if(isset($parameters['alates'])){    
     $alates=new DateTime($parameters['alates']);
     $alates=$alates->format('d.m.Y');
-    $parameters['alates']=$alates;
+    $parameters['alates']=$alates;}
+    if(isset($parameters['kuni'])){
     $kuni=new DateTime($parameters['kuni']);
     $kuni=$kuni->format('d.m.Y');
     $parameters['kuni']=$kuni;
-    
+    }
     foreach ($search_results as $result) {
       if ($result->entity_type == 'node') {
         $nids[$result->entity_id] = $result->entity_id;
@@ -250,6 +251,7 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
   }
 
   if ($parameters['kuni']) {
+    
     $alates=new DateTime($parameters['alates']);
     $alates=$alates->format('d.m.Y');
     $parameters['alates']=$alates;
@@ -267,9 +269,12 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
       ->propertyCondition('created', mktime(0, 0, 0, 1, 1, $parameters['year']), '>=')
       ->propertyCondition('created', mktime(0, 0, 0, 12, 31, $parameters['year']), '<=');
   }
-
+  
   if(isset($parameters['marksonad'])) {
-    if(count($nids)>0) $query->propertyCondition('nid', $nids);
+    if(count($nids)>0) {
+      
+      $query->propertyCondition('nid', $nids);
+    }
   }
 
   if (isset($parameters['menetluse_liik'])) {
@@ -313,7 +318,9 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
   $query->propertyOrderBy('created', 'DESC');
 
   if ($authorities) {
+    
     $result = $query->execute();
+    
     $nodes = entity_load('node', @array_keys($result['node']));
 
     $alad = array();
@@ -355,9 +362,9 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
   }
 
   $result = $query->execute();
-
+  
   $nodes = entity_load('node', @array_keys($result['node']));
-
+  
   $nids = array();
   $fids = array();
 
@@ -420,7 +427,7 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
   if (is_numeric($parameters['aasta'])) {
     return in_array($parameters['aasta'], array_keys($tulemused)) ? array($parameters['aasta'] => $tulemused[$parameters['aasta']]) : array();
   }
-
+  
   return $tulemused;
 }
 

@@ -514,6 +514,7 @@ function oigus_seisukohad_otsing_form() {
 }
 
 function oigus_seisukohad_otsing_form_submit($form, &$form_state) {
+  
   if($form_state['values']['menetluse_liik'] == 3){
     $form_state['values']['dokumendi_liik2'] = 0;
     $form_state['values']['dokumendi_liik3'] = 0;
