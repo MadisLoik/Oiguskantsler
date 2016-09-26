@@ -187,21 +187,34 @@ function oiguskantsler_front_page_content_load_more() {
        $output='';
   while($record = $result->fetchAssoc()) {
       $node= node_load($record['nid']);
+      if($tyyp=='seisukoht'){
+          $opinion_link=file_create_url($node->field_document['und'][0]['uri']);
+      }
       $date=date('d.M.Y',$node->created);
       $output.='  
                     <article>
-                        
-                        <h2>'.$node->title.'</h2><span class="date">'.$date.'</span>
-                        
+                        ';
+                        if($tyyp=='seisukoht'){
+                        $output.='<a href="'.$opinion_link.'"><h2>'.$node->title.'</h2><span class="date">'.$date.'</span>';
+                        }
+                        else{
+                            $output.='<h2>'.$node->title.'</h2><span class="date">'.$date.'</span>';
+                        }
+                        $output.='
                         <div class="news_content">
                         ';
                         
                         if(!empty($node->body)):
                         $output.='<p class="front_content_seisukoht">'.$node->body[$language][0]['value'].'</p>';    
                         endif;    
+                        $output.='</div>';
+                        if($tyyp=='seisukoht'){
+                            $output.='<a href="'.$opinion_link.'">'.t('Read more').'</a>';
+                        }
+                        else{
+                            $output.='<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>';
+                        }
                         $output.='
-                        </div>'.'<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>
-                        
                     </article>
                     
                     ';
