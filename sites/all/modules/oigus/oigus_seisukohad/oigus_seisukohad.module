@@ -333,6 +333,17 @@ function theme_oigus_seisukohad_otsing_form($variables) {
 
 function oigus_seisukohad_otsing_form() {
   global $_domain;
+  
+  $strings=explode('/',$_GET['q']);
+  
+  if(isset($strings[1])){
+    if($strings[1]=='oiguskaitse'){
+      $lahter=4;
+    }
+    elseif($strings[1]=='jarelvalve'){
+      $lahter=3;
+    }
+  }
   $form = array();
 
   $form['sisutuup'] = array(
@@ -387,7 +398,7 @@ function oigus_seisukohad_otsing_form() {
     ),
     '#title_display' => 'invisible',
   );
-
+  
   $form['menetluse_liik'] = array(
     '#type' => 'select',
     '#title' => t('Type of proceeding'),
@@ -399,6 +410,10 @@ function oigus_seisukohad_otsing_form() {
     ),
     '#title_display' => 'invisible',
   );
+  
+  if(isset($lahter) and !empty($lahter)){
+    $form['menetluse_liik']['#default_value']=$lahter;
+  }
 
   $form['dokumendi_liik'] = array(
     '#type' => 'select',
