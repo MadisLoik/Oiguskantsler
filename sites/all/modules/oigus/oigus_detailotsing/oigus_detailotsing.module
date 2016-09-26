@@ -109,6 +109,7 @@ function oigus_detailotsing_detailsotsing_form() {
   $form['kuni'] = array(
     '#type' => 'textfield',
     '#title' => t('Kuni'),
+    '#title_display' => 'invisible',
     '#default_value' => oigus_detailotsing_get_parameter_value('kuni'),
     '#attributes' => array(
       'class' => array('date'),

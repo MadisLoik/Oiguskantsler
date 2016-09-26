@@ -362,6 +362,7 @@ function oigus_seisukohad_otsing_form() {
   );
 
   $form['alates'] = array(
+    '#date_label_position' => 'hidden',
     '#type' => 'date_popup',
     '#title' => t('From'),
     '#default_value' => oigus_detailotsing_get_parameter_value('alates'),
@@ -374,11 +375,13 @@ function oigus_seisukohad_otsing_form() {
   );
 
   $form['kuni'] = array(
+    '#date_label_position' => 'hidden',
     '#type' => 'date_popup',
     '#title' => t('To'),
     '#default_value' => oigus_detailotsing_get_parameter_value('kuni'),
     '#id' => 'kuni',
     '#date_format' => 'd.m.Y',
+    
     '#attributes' => array(
       'class' => array('date'),
     ),
