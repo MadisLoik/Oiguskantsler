@@ -185,3 +185,9 @@ header .navbar-collapse{
 header .navbar-collapse #edit-submit{
     margin-left: 15px;
 }
+.suuruse_maaramine a {
+    text-decoration: none;
+}
+.front a {
+    text-decoration: none;
+}
