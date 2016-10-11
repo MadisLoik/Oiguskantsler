@@ -113,8 +113,10 @@
       <?php endif; ?>
     
     </section>
-
-</div>
+  
+  </div>
+  
+  
   <section >
         <div class="container">
             <div class="row">
@@ -159,6 +161,8 @@
             </div>
         </div>
     </section>
+
+</div>
 
 <?php if (!empty($page['footer'])): ?>
   <footer class="footer <?php print $container_class; ?>">
