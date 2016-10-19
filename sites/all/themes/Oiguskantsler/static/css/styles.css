@@ -5,6 +5,7 @@
 body{
 	
 	font-family: "Open Sans";
+	font-size: 17px;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -21,15 +22,24 @@ h2.title{ font-size: 34px; color: #999999; margin: 0; padding: 30px 0; }
 A{ color: #555555; }
 A:hover{ color: inherit; text-decoration: none; }
 
-p{ font-size: 17px; color: #555555; }
+p{ *font-size: 17px; color: #555555; }
 p.small{ font-size: 14px; }
 
-TABLE{ margin: 0 0 10px 0; border:1px solid #555; }
-TABLE TD{ padding: 5px; border:1px solid #555; } 
+TABLE{ border:none; }
+TABLE TD,
+TABLE TH{ border:none; *font-size: 17px; padding: 5px; }
+
+TABLE.table{ margin: 0 0 10px 0; border-bottom:1px solid #DDDDDD; }
+TABLE.table TD{ padding: 5px; border-bottom:1px solid #DDDDDD; } 
 
 .date{ font-size: 13px; color: #3d7cb6; display: block; padding-bottom: 10px; }
 .date{}
 .fa-chevron-down{ font-size: 10px; padding-left: 10px; float: right; padding-top: 3px; }
+
+TABLE.borderless td, 
+TABLE.borderless th {
+    border: none !important;
+}
 
 
 /*----------------------------------------------------*/
@@ -54,6 +64,9 @@ TABLE TD{ padding: 5px; border:1px solid #555; }
 .table tr:first-child td{ border: none; }
 
 .table .date{ padding-top: 5px; }
+
+
+.breadcrumb{ background-color: transparent; }
 
 /*----------------------------------------------------*/
 /* Animations 										  */
@@ -94,7 +107,7 @@ body.content header{ height: 35vh; background: url(../images/maja-wide.jpg) no-r
 	margin-top: 30px;
 	padding: 10px 50px 8px 50px;
 	border-radius: 30px;
-	font-size: 17px;
+	*font-size: 17px;
 	font-weight: 600;
 	background-color: rgba(255,255,255,0.9);
 	color: #3d7cb6;
@@ -157,7 +170,7 @@ nav.navbar-main{
 	nav.navbar-main.fixed{ position: fixed; top:0; bottom: auto; z-index: 1000; }
 	nav.navbar-main a.level1{ 
 		color: #FFF; 
-		font-size: 17px; 
+		*font-size: 17px; 
 		text-transform: uppercase; 
 		-webkit-transition: all 0.5s ease;
 		-o-transition: all 0.5s ease;
@@ -198,6 +211,8 @@ nav.navbar-main{
 	}
 	.dropdown-menu a:hover{ color: #3d7cb6; text-decoration: none; }
 	.dropdown-menu p{ font-size: 13px; }
+	
+	
 
 .open a{}
 
@@ -276,6 +291,13 @@ article ol li a{ font-size: 16px; color: #555555; }
 .files-table TD:last-child{ text-align: right; }
 .files-table .file-icon{ padding-right: 15px; height: 16px; }
 
+/*----------------------------------------------------*/
+/* Form 											  */
+/*----------------------------------------------------*/
+.form-item{
+	padding-bottom: 20px;
+}
+.form-item .form-item{ padding-bottom: 5px; }
 
 /*----------------------------------------------------*/
 /* social 											  */

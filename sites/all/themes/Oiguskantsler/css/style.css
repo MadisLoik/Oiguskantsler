@@ -3,14 +3,14 @@
  */
 a.to_big {
     
-    font-size: 30px;
+    font-size: 30px !important;
     
 }
 a.to_normal{
-    font-size:20px;
+    font-size:20px !important;
 }
 a.to_small{
-    font-size:10px;
+    font-size:10px !important;
 }
 a#text_resize_increase {
     background:none;
