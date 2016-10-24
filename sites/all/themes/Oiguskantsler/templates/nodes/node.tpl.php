@@ -80,6 +80,47 @@
  */
 ?>
 <?php if($view_mode=='teaser'):?>
+
+  <?php if ((!$page && !empty($title)) || !empty($title_prefix) || !empty($title_suffix) || $display_submitted): ?>
+
+
+
+    <?php print render($title_prefix); ?>
+    <?php if (!$page && !empty($title)): ?>
+    <a href="<?php print $node_url; ?>"><?php print $title; ?></a>
+    <?php endif; ?>
+    <?php print render($title_suffix); ?>
+    <?php if ($display_submitted): ?>
+    <span class="date">
+      <?php /*print $user_picture;*/ ?>
+      <?php print $submitted; ?>
+    </span>
+    <?php endif; ?>
+
+
+
+  <?php endif; ?>
+  <?php
+    // Hide comments, tags, and links now so that we can render them later.
+    hide($content['comments']);
+    hide($content['links']);
+    hide($content['field_tags']);
+    
+    //echo "<div class=small-intro>";  
+    //print render($content);
+    //echo "</div>";
+  ?>
+  <?php if (!empty($content['field_tags']) || !empty($content['links'])): ?>
+
+
+    <?php print render($content['field_tags']); ?>
+    <?php /*print render($content['links']);*/ ?>
+
+
+  <?php endif; ?>
+  <?php /*print render($content['comments']);*/ ?>
+
+<?php /* ?>
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>
   <?php if ((!$page && !empty($title)) || !empty($title_prefix) || !empty($title_suffix) || $display_submitted): ?>
   <header class="not_so_big">
@@ -111,6 +152,9 @@
   <?php endif; ?>
   <?php print render($content['comments']); ?>
 </article>
+<?php */ ?>
+
+
 <?php endif;?>
 <?php if($view_mode=='full'):?>
 <article id="node-<?php print $node->nid; ?>" class="<?php print $classes; ?> clearfix"<?php print $attributes; ?>>

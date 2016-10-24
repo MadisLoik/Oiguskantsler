@@ -41,6 +41,11 @@ TABLE.borderless th {
     border: none !important;
 }
 
+.rteindent1,
+ul,
+ol{ color: inherit; font-size: 18px; margin:0; padding: 0 0 0 30px;  }
+
+
 
 /*----------------------------------------------------*/
 /* Custom 											  */
@@ -276,6 +281,24 @@ article ol li{}
 article ol li,
 article ol li a{ font-size: 16px; color: #555555; }
 
+article .custom_footer{ padding: 0; }
+article header h2{  }
+
+
+/* Accordion content */
+blockquote{
+	display: none;
+	border:none;
+	padding:0;
+	margin:0;
+	*border:1px solid red;
+	overflow: hidden;
+}
+
+.rtejustify{ margin: 0; padding: 0; }
+
+.toggleMe{ padding-bottom: 10px; cursor: pointer; }
+
 /* Views */
 .view li{
 	list-style-type: none;
@@ -323,6 +346,14 @@ article ol li a{ font-size: 16px; color: #555555; }
 
 .tags{}
 .tags a{ color: #999; display: inline-block; padding: 0 10px 0 0; }
+
+/*----------------------------------------------------*/
+/* Kõned ja intervjuud 								  */
+/*----------------------------------------------------*/
+
+.view-konedjaintervjuud li{
+	*border-bottom: 1px solid #CCC;
+}
 
 
 /*----------------------------------------------------*/

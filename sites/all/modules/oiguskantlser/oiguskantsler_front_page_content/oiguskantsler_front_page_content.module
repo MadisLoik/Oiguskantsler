@@ -97,7 +97,7 @@ function oiguskantsler_uudised(){
                         
                         <div class="news_content">
                         <p class="front_content">'.$node->body[$language->language][0]['value'].'</p>
-                        </div>'.'<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>
+                        </div>'.'<a href="'.url('node/'.$node->nid).'" class="btn btn-text-link">'.t('Read more').' »</a>
                         
                     </article>
                     ';
@@ -143,7 +143,7 @@ function oiguskantsler_seisukohad(){
                         $output.='<p class="front_content_seisukoht">'.$node->body[$language->language][0]['value'].'</p>';    
                         endif;    
                         $output.='
-                          </div>'.'<a href="'.$opinion_link.'">'.t('Read more').'</a>
+                          </div>'.'<a href="'.$opinion_link.'" class="btn btn-text-link">'.t('Read more').' »</a>
                         
                     </article>
                     
