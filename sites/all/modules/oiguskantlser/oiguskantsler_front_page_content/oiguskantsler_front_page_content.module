@@ -82,7 +82,7 @@ function oiguskantsler_uudised(){
  $type=2;
  while($record = $result->fetchAssoc()) {
      
-   $node=node_load($record['nid']);     
+   $node=node_load($record['nid']);      
    
    $date=date("d.m.Y", $node->created);
    $number_of_news=5;
@@ -90,10 +90,11 @@ function oiguskantsler_uudised(){
    
    $output.='  
                     <article>
+                        <a href="'.url('node/'.$node->nid).'">
+                        <h2>'.$node->title.'</h2>
+                        </a>
                         
-                        <h2>'.$node->title.'</h2><span class="date">'.$date.'
-                        
-                        </span>
+                        <span class="date">'.$date.'</span>
                         
                         <div class="news_content">
                         <p class="front_content">'.$node->body[$language->language][0]['value'].'</p>
