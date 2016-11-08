@@ -14,13 +14,43 @@ function oiguskantsler_information_settings_form($form_state,$mid = 0){
     
 
 ////////////////////////////////////////////////Front page top text//////////////////////////////////////////////////////////////////////////////
-  $footer = variable_get('front_page_top_text', array('value' => '', 'format' => NULL));
+  $footer = variable_get('front_page_top_text_eesti', array('value' => '', 'format' => NULL));
   
-  $form['front_page_top_text'] = array(
+  $form['front_page_top_text_eesti'] = array(
       
     '#type' => 'text_format',
     
-    '#title' => t('Front page text: '),
+    '#title' => t('Front page top text eesti: '),
+    
+    '#default_value' => $footer['value'],
+    
+    '#size' => 255,
+    
+    '#required' => FALSE,
+    
+  );  ////////////////////////////////////////////////Front page top text//////////////////////////////////////////////////////////////////////////////
+  $footer = variable_get('front_page_top_text_inglise', array('value' => '', 'format' => NULL));
+  
+  $form['front_page_top_text_inglise'] = array(
+      
+    '#type' => 'text_format',
+    
+    '#title' => t('Front page top text inglise: '),
+    
+    '#default_value' => $footer['value'],
+    
+    '#size' => 255,
+    
+    '#required' => FALSE,
+    
+  );  ////////////////////////////////////////////////Front page top text//////////////////////////////////////////////////////////////////////////////
+  $footer = variable_get('front_page_top_text_vene', array('value' => '', 'format' => NULL));
+  
+  $form['front_page_top_text_vene'] = array(
+      
+    '#type' => 'text_format',
+    
+    '#title' => t('Front page top text vene: '),
     
     '#default_value' => $footer['value'],
     

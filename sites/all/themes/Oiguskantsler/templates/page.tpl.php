@@ -123,7 +123,7 @@
                <?php if (!empty($page['sidebar_first'])): ?>
                 <div class="col-lg-3">
                    
-                    <?php print render($page['sidebar_first']); ?>
+                  <?php print render($page['sidebar_first']); ?>
                     
                 </div>
                <?php endif; ?>

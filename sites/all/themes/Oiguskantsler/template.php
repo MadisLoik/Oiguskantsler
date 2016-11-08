@@ -43,9 +43,13 @@ function Oiguskantsler_webform_element($variables) {
   
  
   $output .= '<div class="webform_custom" id="' . $element['#id'] . '">' . $value . '</div>' . "\n";
+  if(isset($element['#attributes']['title']) and $element['#attributes']['data-toggle']=='tooltip'){
+     $output .= ' <div class="kirjeldus">' . $element['#attributes']['title']. "</div>\n";
+  }
+  else{
   if (!empty($element['#webform_component']['extra']['description'])) {
     $output .= ' <div class="kirjeldus">' . $element['#webform_component']['extra']['description'] . "</div>\n";
-  }
+  }}
   $output .= "</div>\n";
 
   return $output;

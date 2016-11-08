@@ -247,12 +247,19 @@ return $output;
 }
 
 function oiguskantsler_top_text(){
-  
-  $top_text= variable_get('front_page_top_text');
-  
+  global $language;
+  if($language->language=='et'){
+  $top_text= variable_get('front_page_top_text_eesti');
+  }
+  elseif($language->language=='en'){
+  $top_text= variable_get('front_page_top_text_inglise');
+  }
+  elseif($language->language=='ru'){
+  $top_text= variable_get('front_page_top_text_vene');
+  }
   $output='
             <div class="slogan">
-                '.$top_text['value'].'<a href="'.url('node/17825').'" class="btn btn-primary btn-header">'.t('PETITION TO THE CHANCELLOR OF JUSTICE ').'</a>
+                '.t($top_text['value']).'<a href="'.url('node/17825').'" class="btn btn-primary btn-header">'.t('PETITION TO THE CHANCELLOR OF JUSTICE ').'</a>
             </div>
         ';
   return $output;

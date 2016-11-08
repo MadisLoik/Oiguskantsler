@@ -136,7 +136,7 @@ function oiguskantsler_seisukohad(){
    $output.='  
                     <article>
                         
-                        <a href="'.$opinion_link.'"><h2>'.$node->title.'</h2></a><span class="date">'.$date.'</span>
+                        
                         
                         <div class="news_content">
                         ';
