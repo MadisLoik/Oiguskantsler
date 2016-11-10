@@ -136,10 +136,15 @@ function oiguskantsler_seisukohad(){
    $output.='  
                     <article>
                         
+                        ';
                         
                         
+                        $output.='<a href="'.$opinion_link.'"><h2>'.$node->title.'</h2><span class="date">'.$date.'</span>';
+                       
+                        $output.='
                         <div class="news_content">
                         ';
+                        
                         if(!empty($node->body)):
                         $output.='<p class="front_content_seisukoht">'.$node->body[$language->language][0]['value'].'</p>';    
                         endif;    

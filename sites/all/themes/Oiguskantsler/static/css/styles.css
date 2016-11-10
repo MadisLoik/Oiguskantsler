@@ -165,7 +165,7 @@ nav.navbar-main{
 	margin: 0;
 	position: absolute;
 	width: 100%;
-	white-space: nowrap;
+	*white-space: nowrap;
 	bottom: 0;
 	border: none;
 	border-radius: 0;
