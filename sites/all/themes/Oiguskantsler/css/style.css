@@ -29,12 +29,13 @@ a#text_resize_decrease {
     padding-left: 0px; }
     
 article div.news_content{
+    position: relative;
     height:auto;
     max-height: 115px;
     overflow: hidden;
-    
 }
 article div.news_content_seisukoht{
+    position: relative;
     height:auto;
     max-height: 115px;
     overflow: hidden;
