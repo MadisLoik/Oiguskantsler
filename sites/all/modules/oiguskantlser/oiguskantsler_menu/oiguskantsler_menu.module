@@ -290,7 +290,7 @@ function Oiguskantlser_menu(){
          
       }
       $output.='<div class="collapse navbar-collapse" id="bs-navbar-collapse">
-                    <ul class="nav navbar-nav navbar-center">';
+                    <ul class="nav navbar-nav navbar-center main-navbar-ul">';
                     
                     foreach ($main_menu_tree as $menu_item) {
                         $true_item=$menu_item['link'];

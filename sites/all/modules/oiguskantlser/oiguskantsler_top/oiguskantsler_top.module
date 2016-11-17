@@ -249,19 +249,25 @@ return $output;
 function oiguskantsler_top_text(){
   global $language;
   if($language->language=='et'){
-  $top_text= variable_get('front_page_top_text_eesti');
+    $top_text = variable_get('front_page_top_text_eesti');
+    //$top_link = url('node/17825');
   }
   elseif($language->language=='en'){
-  $top_text= variable_get('front_page_top_text_inglise');
+    $top_text= variable_get('front_page_top_text_inglise');
+    //$top_link = url('node/32897');
   }
   elseif($language->language=='ru'){
-  $top_text= variable_get('front_page_top_text_vene');
+    $top_text= variable_get('front_page_top_text_vene');
+    //$top_link = url('node/17825');
   }
   $output='
-            <div class="slogan">
-                '.t($top_text['value']).'<a href="'.url('node/17825').'" class="btn btn-primary btn-header">'.t('PETITION TO THE CHANCELLOR OF JUSTICE ').'</a>
-            </div>
+    <div class="slogan">
+        '.t($top_text['value']).'
+    </div>
         ';
+  
+  /*  Taavi: We can add this button on ckeditor <a href="'.$top_link.'" class="btn btn-primary btn-header">'.t('PETITION TO THE CHANCELLOR OF JUSTICE ').'</a> */
+        
   return $output;
   
   
