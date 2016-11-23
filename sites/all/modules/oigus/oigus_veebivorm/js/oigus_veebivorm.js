@@ -9,7 +9,7 @@
 
       $('.oigus-veebivorm .actions').append('<a href="#" class="add-new-file">' + Drupal.t('Add new file')  + '</a></button>');
 
-      $('.oigus-veebivorm .actions .add-new-file').live('click', function(e) {
+      $('.oigus-veebivorm .actions .add-new-file').on('click', function(e) {
         e.preventDefault();
 
         var elements = $(this).parents('.oigus-veebivorm').find('.elements');
@@ -30,6 +30,8 @@
           $(this).attr('size', 30);
         });
 
+        /*
+        
         if ($.browser.mozilla) {
           $('.oigus-veebivorm .element .remove').css('margin', '4px 0 0 -20px');
         }
@@ -41,9 +43,12 @@
         if ($.browser.opera) {
           $('.oigus-veebivorm .element .remove').css('margin', '3px 0 0 8px');
         }
+        
+        */
+        
       });
 
-      $('.oigus-veebivorm .remove').live('click', function(e) {
+      $(document.body).on('click', ".oigus-veebivorm .remove", function(e) {
         e.preventDefault();
 
         if ($(this).parents('.elements').find('.element').length <= 10) {

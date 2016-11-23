@@ -91,12 +91,15 @@
 				        $image_style='galerii_thumbnail';
 				        $image_url=image_style_url($image_style,$value['uri']);
 				        $original_url=file_create_url($value['uri']);
+				        $image_description=$value['title'];
 				        
 				        ?>
 				        <div class="col-lg-4">
-				        	<a class="colorbox" href="<?php print $original_url?>" rel="colorbox-gallery"><img class="gallery_thumbnail"src="<?php print $image_url?>" alt=""></a>
-				           
-						</div>
+				        	<a class="colorbox image-container" href="<?php print $original_url?>" rel="colorbox-gallery">
+				        		<img class="gallery_thumbnail"src="<?php print $image_url?>" alt="">
+				        		<p><?php print $image_description?></p>
+				        	</a>
+				        </div>
 				        <?php
 				    }
 				    ?>

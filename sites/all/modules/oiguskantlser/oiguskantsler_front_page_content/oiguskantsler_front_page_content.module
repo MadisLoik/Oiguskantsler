@@ -87,6 +87,8 @@ function oiguskantsler_uudised(){
    $date=date("d.m.Y", $node->created);
    $number_of_news=5;
    
+   $node_lead = strip_tags($node->body[$language->language][0]['value']);
+   $node_lead = substr($node_lead, 0, strpos($node_lead, ' ', 200));
    
    $output.='  
                     <article>
@@ -97,7 +99,7 @@ function oiguskantsler_uudised(){
                         <span class="date">'.$date.'</span>
                         
                         <div class="news_content">
-                        <p class="front_content">'.$node->body[$language->language][0]['value'].'</p>
+                        <p class="front_content">'.$node_lead.'...</p>
                         </div>'.'<a href="'.url('node/'.$node->nid).'" class="btn btn-text-link">'.t('Read more').' »</a>
                         
                     </article>

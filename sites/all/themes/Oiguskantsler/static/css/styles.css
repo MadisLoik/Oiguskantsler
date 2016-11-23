@@ -41,6 +41,14 @@ TABLE.borderless th {
     border: none !important;
 }
 
+/* Kontaktid tabel */
+.kontaktid TD:nth-child(1){ width:20% !important; }
+.kontaktid TD:nth-child(2){ width:30% !important; }
+.kontaktid TD:nth-child(3){ width:30% !important; }
+.kontaktid TD:last-child{
+	text-align: right;
+}
+
 .rteindent1,
 ul,
 ol{ color: inherit; font-size: 18px; margin:0; padding: 0 0 0 30px;  }
@@ -241,13 +249,45 @@ nav.navbar-main{
 /* Search results */
 .search-results{ margin: 0; padding: 0 0 0 20px; }
 
+.form-inline .btn{ margin: -15px 0 0 5px; }
+
 
 .main-navbar-ul{
 	white-space: nowrap;
 }
 .main-navbar-ul div *{ white-space: normal; }
 
+/* Files */
+.add-new-file{
+	margin-top:5px;
+	display:inline-block;
+	border:1px solid #CCC;
+	padding:5px 10px;
+	border-radius:5px;
+	font-size:14px;
+	text-decoration:none !important;
+}
 
+.oigus-veebivorm .element{
+	border:1px solid #CCC;
+	padding:5px;
+	margin-bottom:5px;
+}
+.oigus-veebivorm .element-1{ padding:0; }
+.oigus-veebivorm .element *{ border:none; }
+.oigus-veebivorm .element input, .oigus-veebivorm .element .remove {
+    float: left;
+}
+.oigus-veebivorm .element .remove {
+    margin-left: 8px;
+    background: url(/sites/all/themes/Oiguskantsler/remove.png) no-repeat center center;
+    display: block;
+    width: 14px;
+    height: 14px;
+    text-indent: -9999px;
+    cursor: pointer;
+    margin-top: 6px;
+}
 /*----------------------------------------------------*/
 /* Sidemenu											  */
 /*----------------------------------------------------*/
@@ -299,6 +339,10 @@ blockquote{
 .rtejustify{ margin: 0; padding: 0; }
 
 .toggleMe{ padding-bottom: 10px; cursor: pointer; }
+
+UL.toggleMe{ padding-bottom:0; }
+UL.toggleMe LI{ padding:5px 0; }
+UL.toggleMe LI H3{ padding:0; }
 
 /* Views */
 .view li{
@@ -371,6 +415,11 @@ blockquote{
 .gallery-image{ padding-bottom: 30px; display: block; position: relative; }
 .gallery_title{ position: absolute; top:94%; }
 .gallery_title p{ font-size: 13px; }
+
+.image-container,
+.image-container *{ text-decoration:none !important;}
+.image-container{ display:block; padding:0 0 15px 0; border:1px solid #FFF; }
+.image-container p{ text-decoration:none !important; font-size:14px; }
 
 /*----------------------------------------------------*/
 /* footer 											  */
