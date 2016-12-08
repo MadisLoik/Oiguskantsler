@@ -160,7 +160,7 @@ function oiguskantsler_seisukohad(){
    $output.='<div id="ajax-target"></div>';
     
                 
-    $output.='     <button id="load_more_s" loaded_value="5" onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load more').'</button> <a href="'.$language->language.'/seisukohad" class="btn btn-link">'.t('Opinions archive').'</a>';
+    $output.='     <button id="load_more_s" loaded_value="5" onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load more').'</button> <a href="/'.$language->language.'/seisukohad" class="btn btn-link">'.t('Opinions archive').'</a>';
 return $output;
 }
 
@@ -199,6 +199,7 @@ function oiguskantsler_front_page_content_load_more() {
           $opinion_link=file_create_url($node->field_document['und'][0]['uri']);
       }
       $date=date('d.m.Y',$node->created);
+      
       $output.='  
                     <article>
                         ';
@@ -213,14 +214,18 @@ function oiguskantsler_front_page_content_load_more() {
                         ';
                         
                         if(!empty($node->body)):
-                        $output.='<p class="front_content_seisukoht">'.$node->body[$language][0]['value'].'</p>';    
+                            
+                        $node_lead = strip_tags($node->body[$language][0]['value']);
+                        $node_lead = substr($node_lead, 0, strpos($node_lead, ' ', 200));
+                            
+                        $output.='<p class="front_content_seisukoht">'.$node_lead.'...</p>';    
                         endif;    
                         $output.='</div>';
                         if($tyyp=='seisukoht'){
-                            $output.='<a href="'.$opinion_link.'">'.t('Read more').'</a>';
+                            $output.='<a href="'.$opinion_link.'" class="btn btn-text-link">'.t('Read more').' »</a>';
                         }
                         else{
-                            $output.='<a href="'.url('node/'.$node->nid).'">'.t('Read more').'</a>';
+                            $output.='<a href="'.url('node/'.$node->nid).'" class="btn btn-text-link">'.t('Read more').' »</a>';
                         }
                         $output.='
                     </article>

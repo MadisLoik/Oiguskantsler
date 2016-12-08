@@ -33,7 +33,7 @@ function oigus_detailotsing_theme() {
 function theme_oigus_detailotsing_detailsotsing_form($variables) {
   $form = $variables['form'];
 
-  $output = '<div class="views-exposed-form">';
+  $output = 'TER<div class="views-exposed-form">';
   $output .= '<div class="views-exposed-widgets clearfix slidediv" style="display: block; ">';
 
   $output .= '<div id="edit-search-api-views-fulltext-wrapper" class="views-exposed-widget views-widget-filter-search_api_views_fulltext">';
