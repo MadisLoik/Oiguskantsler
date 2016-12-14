@@ -245,7 +245,7 @@ nav.navbar-main{
 .open a{}
 
 /* Menu Search */
-.menu-search{ line-height: 50px; }
+.menu-search{ line-height: 50px; overflow:hidden; }
 .menu-search input,
 .menu-search button{ border: none; *height: 50px; margin: 0; padding: 0;}
 
@@ -258,7 +258,7 @@ nav.navbar-main{
 .menu-search input{ height: 30px; border: 1px solid transparent; padding: 0 10px; color: #FFF; min-width: 160px; }
 .menu-search input:hover,
 .menu-search input:active,
-.menu-search input:focus{ border: 1px solid #FFF; border-radius: 20px; width:90%; background:none; }
+.menu-search input:focus{ border: 1px solid #FFF; border-radius: 20px; *width:90%; background:none; }
 
 /* Search results */
 .search-results{ margin: 0; padding: 0 0 0 20px; }
