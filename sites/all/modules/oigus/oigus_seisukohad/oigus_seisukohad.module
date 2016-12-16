@@ -312,7 +312,7 @@ function theme_oigus_seisukohad_otsing_form($variables) {
   $output .= '</span>';
   $output .= '</div>';
 
- 
+  $output .= drupal_render($form['dokumendist']);
 
 
   $output .= '<div class="action clear">';
