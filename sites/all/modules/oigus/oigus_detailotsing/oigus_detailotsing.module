@@ -192,13 +192,16 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
 
   $tulemused = array();
   
+  
   $nids = array();
   if (isset($parameters['marksonad'])) {
     //variable_set('apachesolr_rows', 10000);
     
     $search_results = oigus_detailotsing_search($parameters['marksonad']); //print_r($search_results);
     //variable_set('apachesolr_rows', 10);
-  
+    ini_set('memory_limit','600M');
+    
+   // return 1;
     //$parameters['alates']=str_replace('-','.',$parameters['alates']);
     //$parameters['kuni']=str_replace('-','.',$parameters['kuni']);
     if(isset($parameters['alates'])){    
@@ -210,13 +213,24 @@ function oigus_detailotsing_tulemused($parameters, $clean = false, $count = fals
     $kuni=$kuni->format('d.m.Y');
     $parameters['kuni']=$kuni;
     }
+    $i=0;
     foreach ($search_results as $result) {
       if ($result->entity_type == 'node') {
         $nids[$result->entity_id] = $result->entity_id;
       }
-      else if ($result->entity_type == 'file' && isset($result['file']->is_nid)) {
-        if(isset($parameters['dokumendist'])) $nids[$result['file']->is_nid] = $result['file']->is_nid;
+      else if ($result->entity_type == 'file' && isset($result->zm_parent_entity[0])) {
+        $exploded=explode(',',$result->zm_parent_entity[0]);
+        $exploded[1] = str_replace('"','',$exploded[1]);
+        $nid_array=explode(':',$exploded[1]);
+
+        $nids[$nid_array[1]]=$nid_array[1];
+        //if(isset($parameters['dokumendist'])) $nids[$result['file']->is_nid] = $result['file']->is_nid;
       }
+      if($i==10){
+        //break;
+      }
+      $i++;
+      
     }
   }
 
@@ -527,17 +541,21 @@ function oigus_detailotsing_search($keys) {
   $query = apachesolr_drupal_query("custom", array('q' => $_GET['marksonad'] ), 'sort_label asc', 'search/path');
   $query->addParam('q',$_GET['marksonad']);
   
-  $query->addParam('rows',200);
+  $query->addParam('rows',400);
   if(isset($whole_datetime)and isset($whole_datetime_kuni)):
   $query->addParam('fq','ds_created:['.strval($whole_datetime).' TO '.strval($whole_datetime_kuni).']');
   endif;
+  if(isset($_GET['dokumendist']) and $_GET['dokumendist']==1){
+    $query->addParam('fq','sm_parent_entity_bundle:node-seisukoht');
+  }
+  
   if(isset($_GET['menetluse_liik'])):
     
   $query->addParam('fq','im_field_menetluse_liik:'.$_GET['menetluse_liik']);
   
   endif; 
   
-  if(isset($_GET['sisutuup'])):
+  if(isset($_GET['sisutuup']) and !isset($_GET['dokumendist'])):
     
   $query->addParam('fq','bundle:'.$_GET['sisutuup']);
   
@@ -562,7 +580,7 @@ function oigus_detailotsing_search($keys) {
   endif;  
   
   
-  
+  //dpm($query->getParams());
   //$query->addParam('fq', 'bundle:'.$_GET['sisutuup']);
   $resp = $query->search();
   

@@ -463,11 +463,11 @@ function oigus_seisukohad_otsing_form() {
     '#title_display' => 'invisible',
   );
   
- /* $form['dokumendist'] = array(
+  $form['dokumendist'] = array(
     '#type' => 'checkbox',
     '#title' => t('Search for a keyword also within a full-text document'),
     '#default_value' => oigus_detailotsing_get_parameter_value('dokumendist'),
-  );*/
+  );
   $form['asutus'] = array(
     '#type' => 'select',
     '#title' => t('Authority'),
