@@ -54,7 +54,7 @@ function oiguskantsler_footer(){
      $type=2;
      $list='';
      while($record = $result->fetchAssoc()) {
-         $list.='<li><a href="'.url('node/'.$record['nid']).'">'.$record['title'].'</a> <span class="date">'.date('d.M.Y',$record['created']).'</span></li>';
+         $list.='<li><a href="'.url('node/'.$record['nid']).'">'.$record['title'].'</a> <span class="date">'.date('d.m.Y',$record['created']).'</span></li>';
      }
      $query = db_select('node','n')
      ->condition('n.type','seisukoht')
@@ -67,8 +67,9 @@ function oiguskantsler_footer(){
      $number_of_news=5;
      $type=2;
      $list_seisukohad='';
+     
      while($record = $result->fetchAssoc()) {
-         $list_seisukohad.='<li><a href="'.url('node/'.$record['nid']).'">'.$record['title'].'</a> <span class="date">'.date('d.M.Y',$record['created']).'</span></li>';
+         $list_seisukohad.='<li><a href="'.url('node/'.$record['nid']).'">'.$record['title'].'</a> <span class="date">'.date('d.m.Y',$record['created']).'</span></li>';
      }
      $footer_text= variable_get('footer_contact_information');
    $output='

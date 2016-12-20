@@ -53,7 +53,7 @@ function oiguskantsler_front_page_content_block_view($delta = '') {
             $block['content'] = array(
                 '#type' => 'item',
                 '#title' => t('Seisukohad'),
-                '#markup' => '<div class="col-lg-6"><h1>'.t('Opinions').'</h1>'.oiguskantsler_seisukohad().'</div>',
+                '#markup' => '<div class="col-lg-6"><h1>'.t('Selection of opinions').'</h1>'.oiguskantsler_seisukohad().'</div>',
             );
             
             
@@ -108,7 +108,7 @@ function oiguskantsler_uudised(){
    
     $output.='<div id="ajax-target-extra"></div>';
                 
-    $output.='    <button id="load_more_u" loaded_value="5"  onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load More').'</button> <a href="/'.$language->language.'/uudised" class="btn btn-link">'.t('News archive').'</a>';
+    $output.='    <button id="load_more_u" loaded_value="5"  onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load More').'</button> <a href="/'.$language->language.'/'.t('news').'" class="btn btn-link">'.t('News archive').'</a>';
     return $output;
     
 }
@@ -160,7 +160,7 @@ function oiguskantsler_seisukohad(){
    $output.='<div id="ajax-target"></div>';
     
                 
-    $output.='     <button id="load_more_s" loaded_value="5" onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load more').'</button> <a href="/'.$language->language.'/seisukohad" class="btn btn-link">'.t('Opinions archive').'</a>';
+    $output.='     <button id="load_more_s" loaded_value="5" onclick="load_more_s('.$number_of_news.','.$type.','.'\''.$language->language.'\''.')" class="btn btn-primary">'.t('Load more').'</button> <a href="/'.$language->language.'/'.t('opinions').'" class="btn btn-link">'.t('Opinions archive').'</a>';
 return $output;
 }
 

@@ -372,7 +372,7 @@ UL.toggleMe LI H3{ padding:0; }
 /* Files table */
 .files-table{ margin-top: 30px; }
 .files-table TH:last-child,
-.files-table TD:last-child{ text-align: right; }
+.files-table TD:last-child{ *text-align: right; }
 .files-table .file-icon{ padding-right: 15px; height: 16px; }
 
 /*----------------------------------------------------*/
