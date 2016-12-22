@@ -311,11 +311,16 @@ function Oiguskantlser_menu(){
                                 
                             //}
                             // else{  
-                             $output.=' <li class="dropdown">
                             
+                            $output.=' <li class="dropdown">';
                             
-                            <a href="#" class="dropdown-toggle level1" data-toggle="dropdown">'.$true_item['title'].'</a>';
+                            if($true_item['link_path'] == "<nolink>"){
+                                $output.='<a href="#" class="dropdown-toggle level1" data-toggle="dropdown">'.$true_item['title'].'</a>';    
+                            }else{
+                                $output.='<a href="'.url($true_item['link_path']).'" class="dropdown-toggle level1" data-toggle="">'.$true_item['title'].'</a>';
+                            }
                             
+                                                        
                             if(!empty($menu_item['below'])){
                                 $output.='
                                 <div class="dropdown-menu">
