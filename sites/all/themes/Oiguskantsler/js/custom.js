@@ -60,5 +60,34 @@ $(document).ready(function(){
       $('.region .sidemenu').hide();
     
    }
+   
+   
+    /* Dokumendi liik*/
+    
+    $('#edit-dokumendist').prop('checked', true);
+    
+    $('#menetluse_liik').on('change', function() {
+        
+        var v = $(this).val();
+      
+        if(v == 3){
+            $('#ml1').show();
+            $('#ml2').hide();
+            $('#ml3').hide();
+        }else if(v == 4){
+            $('#ml1').hide();
+            $('#ml2').show();
+            $('#ml3').hide();
+        }else if(v == 5){
+            $('#ml1').hide();
+            $('#ml2').hide();
+            $('#ml3').show();
+        }else{
+            $('#ml1,#ml2,#ml3').hide();
+        }
+
+
+    });
+
  
 });

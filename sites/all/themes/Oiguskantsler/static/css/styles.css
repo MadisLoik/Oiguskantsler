@@ -38,7 +38,9 @@ TABLE TD,
 TABLE TH{ border:none; *font-size: 17px; padding: 5px; font-size: inherit; color: auto; border-bottom:1px solid #DDDDDD; border-bottom:1px solid #DDDDDD; }
 
 TABLE TD:last-child,
-TABLE TH:last-child{ text-align:right; }
+TABLE TH:last-child{ *text-align:right; }
+
+TD, TH{ vertical-align: text-top; }
 
 TABLE.table{ margin: 0 0 10px 0; border-bottom:1px solid #DDDDDD; }
 TABLE.table TD{ padding: 5px; border-bottom:1px solid #DDDDDD; } 

@@ -302,15 +302,15 @@ function Oiguskantlser_menu(){
                             
                            if($menu_item['link']['href']!='<front>'){
                             
-                            if($language->language=='ru'){
+                            //if($language->language=='ru'){
                                 
-                              $output.=' <li class="">
+                              //$output.=' <li class="">
                             
                             
-                            <a href="'.url($true_item['link_path']).'" class="normal_link" data-toggle="">'.$true_item['title'].'</a>';  
+                            //<a href="'.url($true_item['link_path']).'" class="normal_link" data-toggle="">'.$true_item['title'].'</a>';  
                                 
-                            }
-                             else{  
+                            //}
+                            // else{  
                              $output.=' <li class="dropdown">
                             
                             
@@ -343,7 +343,7 @@ function Oiguskantlser_menu(){
                                 </div>
                                 </div>';
                             }
-                             }
+                             //}
                             $output.='
                            
                         </li>';
