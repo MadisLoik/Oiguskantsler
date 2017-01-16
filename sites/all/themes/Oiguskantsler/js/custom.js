@@ -64,7 +64,7 @@ $(document).ready(function(){
    
     /* Dokumendi liik*/
     
-    $('#edit-dokumendist').prop('checked', true);
+    //$('#edit-dokumendist').prop('checked', false);
     
     $('#menetluse_liik').on('change', function() {
         
