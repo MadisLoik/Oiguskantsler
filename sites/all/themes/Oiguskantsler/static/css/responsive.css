@@ -1,19 +1,21 @@
 @media (max-width: 1200px){
 	
 	.navbar-main .navbar-nav{
-		position: relative;
+		*position: relative;
 	}
-	.menu-search{ position: absolute !important; left: 100%; }
+	.menu-search-disabled{ position: absolute !important; left: 100%; }
+	
+	
 }
 
 /* Small screens < 768 */
 @media (max-width: 1000px) {
 	
 	.navbar-main .navbar-nav{
-		position: relative;
+		*position: relative;
 		white-space: nowrap !important;
 	}
-	.menu-search{ position: absolute !important; left: 100%; }
+	.menu-search-disabled{ position: absolute !important; left: 100%; }
 	.container{ width: 100%; }
 	
 }
@@ -31,6 +33,9 @@
 	
 	/* Trail */
 	.trail{ margin-bottom: 15px; margin-left: -15px; margin-top: -15px; }
-
 	
+	.slogan p{ font-size: 24px; line-height: 30px; }
+	.slogan .btn-header{ max-width:100%; white-space: normal; margin-left:10px; margin-right: 10px; }
 }
+
+
