@@ -495,6 +495,7 @@ function oiguskantsler_information_settings_form($form_state,$mid = 0){
 
 //////////////////////////////////////////////// Õigusteenistus facebook////////////////////////////////////////////////////////////////////////////
   $footer = variable_get('fb_oigus', array('value' => '', 'format' => NULL));
+
   
   $form['fb_oigus'] = array(
       
@@ -502,7 +503,7 @@ function oiguskantsler_information_settings_form($form_state,$mid = 0){
     
     '#title' => t(' Õigusteenistus facebook kirjeldus: '),
     
-    '#default_value' => $footer['value'],
+    '#default_value' => $footer,
     
     '#size' => 255,
     
@@ -518,7 +519,7 @@ function oiguskantsler_information_settings_form($form_state,$mid = 0){
     
     '#title' => t(' Õigusteenistus twitter kirjeldus: '),
     
-    '#default_value' => $footer['value'],
+    '#default_value' => $footer,
     
     '#size' => 255,
     

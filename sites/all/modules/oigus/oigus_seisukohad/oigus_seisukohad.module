@@ -465,6 +465,7 @@ function oigus_seisukohad_otsing_form() {
   
   $form['dokumendist'] = array(
     '#type' => 'checkbox',
+    '#attributes' => array('checked' => 'checked'),
     '#title' => t('Search for a keyword also within a full-text document'),
     '#default_value' => oigus_detailotsing_get_parameter_value('dokumendist'),
   );
@@ -1180,7 +1181,6 @@ function oigus_seisukohad_asutused_list($year = false) {
   }else{
      $parameters['year'] = oigus_detailotsing_get_parameter_value('aasta');
   }
-
   return oigus_detailotsing_tulemused($parameters, 0, 0, 1);
 }
 
