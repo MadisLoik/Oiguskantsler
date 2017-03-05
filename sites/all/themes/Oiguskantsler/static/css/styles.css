@@ -320,6 +320,20 @@ nav.navbar-main{
 .sidemenu UL LI A{ font-size: 14px; padding-left: 30px; }
 .sidemenu UL LI:before{ content: "»"; position: absolute; padding: 10px; color: #800000; }
 
+.region-sidebar-first ul{ margin: 0; padding: 0; }
+.region-sidebar-first ul li{ list-style-type: none; margin: 0; padding: 0; }
+.region-sidebar-first ul a,
+.region-sidebar-first ul span,
+.region-sidebar-first ul li a{ color: inherit; text-decoration: none; display: block; padding: 0; padding: 10px 0; font-size: 16px; border-bottom: 1px solid #EFEFEF; }
+.region-sidebar-first ul a:hover,
+.region-sidebar-first ul a.active,
+.region-sidebar-first ul li a:hover,
+.region-sidebar-first ul li a.active{ color: #3d7cb6; }
+.region-sidebar-first ul UL{ margin: 0; padding: 0; }
+.region-sidebar-first ul UL LI{} 
+.region-sidebar-first ul UL LI A{ font-size: 14px; padding-left: 30px; }
+.region-sidebar-first ul UL LI:before{ content: "»"; position: absolute; padding: 10px; color: #800000; }
+
 /*----------------------------------------------------*/
 /* section											  */
 /*----------------------------------------------------*/

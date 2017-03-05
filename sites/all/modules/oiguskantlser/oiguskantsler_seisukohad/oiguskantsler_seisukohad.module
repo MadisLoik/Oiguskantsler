@@ -38,7 +38,7 @@ function oiguskantsler_seisukohad_block_view($delta = '') {
             break;
             case 'oiguskantsler_otsing':
             $block['subject'] = '<none>';
-      $block['content'] = drupal_get_form('oigus_seisukohad_otsing_form');
+            $block['content'] = drupal_get_form('oigus_seisukohad_otsing_form');
             
             
             
