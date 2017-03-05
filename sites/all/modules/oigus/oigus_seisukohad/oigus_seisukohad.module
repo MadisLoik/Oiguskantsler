@@ -1083,11 +1083,9 @@ function oigus_seisukohad_valitsemisalad() {
 function oigus_seisukohad_dokumendi_liigid() {
   $dokumendi_liigid = array();
 
-  $catalog = taxonomy_vocabulary_machine_name_load('');
+  $catalog = taxonomy_vocabulary_machine_name_load(variable_get('oigus_seisukohad_dokumendi_liik', 'dokumendi_liik'));
   $tree = taxonomy_get_tree($catalog->vid, 0, NULL, TRUE);
-
-  //die(print_r($tree));
-
+  
   foreach ($tree as $term){
     $dokumendi_liigid[$term->tid] = function_exists('i18n_string') ? i18n_string('taxonomy:term:'.$term->tid.':name', $term->name) : $term->name;
   }
